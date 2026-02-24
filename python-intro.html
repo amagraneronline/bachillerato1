@@ -1,515 +1,2010 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Introducción a Python</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --bg: #0f172a;
-      --bg-alt: #020617;
-      --card: #111827;
-      --accent: #38bdf8;
-      --accent-soft: rgba(56, 189, 248, 0.15);
-      --text: #e5e7eb;
-      --muted: #9ca3af;
-      --code-bg: #020617;
-      --border: #1f2937;
-      --danger: #f97373;
-      --success: #4ade80;
-      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      --radius: 14px;
-      --shadow: 0 18px 45px rgba(0, 0, 0, 0.55);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Fundamentos</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --accent3: #10b981;
+    --accent4: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --border: rgba(0,212,255,0.15);
+    --code-bg: #0d1117;
+    --radius: 12px;
+  }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    body {
-      font-family: var(--font-main);
-      background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      justify-content: center;
-      padding: 24px;
-    }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Sora', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
 
-    .app {
-      max-width: 1100px;
-      width: 100%;
-      background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
-      border-radius: 24px;
-      border: 1px solid rgba(148, 163, 184, 0.25);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 20% 20%, rgba(0,212,255,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
 
-    /* Decoración de fondo */
-    .app::before,
-    .app::after {
-      content: "";
-      position: absolute;
-      border-radius: 999px;
-      filter: blur(40px);
-      opacity: 0.35;
-      z-index: 0;
-    }
+  /* SIDEBAR NAV */
+  .sidebar {
+    position: fixed;
+    left: 0; top: 0; bottom: 0;
+    width: 260px;
+    background: rgba(17,24,39,0.95);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid var(--border);
+    z-index: 100;
+    overflow-y: auto;
+    padding: 2rem 0;
+    transition: transform 0.3s ease;
+  }
 
-    .app::before {
-      width: 260px;
-      height: 260px;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.6), transparent 70%);
-      top: -60px;
-      right: -40px;
-    }
+  .sidebar-logo {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 1rem;
+  }
 
-    .app::after {
-      width: 220px;
-      height: 220px;
-      background: radial-gradient(circle, rgba(129, 140, 248, 0.6), transparent 70%);
-      bottom: -40px;
-      left: -40px;
-    }
+  .sidebar-logo .py-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    color: white;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.05em;
+  }
 
-    header {
-      position: relative;
-      z-index: 1;
-      padding: 18px 24px 10px;
-      border-bottom: 1px solid rgba(148, 163, 184, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
-      background: linear-gradient(to right, rgba(15, 23, 42, 0.95), rgba(15, 23, 42, 0.85));
-      backdrop-filter: blur(12px);
-    }
+  .sidebar-logo h1 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: white;
+    line-height: 1.2;
+  }
 
-    .title-block {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
+  .sidebar-logo p {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
 
-    .logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 14px;
-      background: radial-gradient(circle at 30% 30%, #facc15, #f97316 55%, #ea580c 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #0f172a;
-      font-weight: 800;
-      font-size: 22px;
-      box-shadow: 0 10px 25px rgba(248, 250, 252, 0.25);
-    }
+  .nav-section {
+    padding: 0.5rem 1rem;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+  }
 
-    .title-text h1 {
-      font-size: 20px;
-      letter-spacing: 0.02em;
-    }
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 1.5rem;
+    cursor: pointer;
+    font-size: 0.82rem;
+    color: var(--muted);
+    transition: all 0.2s;
+    border-left: 3px solid transparent;
+    position: relative;
+  }
 
-    .title-text p {
-      font-size: 13px;
-      color: var(--muted);
-    }
+  .nav-item:hover {
+    color: var(--text);
+    background: rgba(0,212,255,0.05);
+  }
 
-    .progress {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 13px;
-      color: var(--muted);
-    }
+  .nav-item.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: rgba(0,212,255,0.08);
+    font-weight: 600;
+  }
 
-    .progress-bar {
-      width: 140px;
-      height: 6px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      overflow: hidden;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-    }
+  .nav-item .num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    min-width: 20px;
+  }
 
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      border-radius: inherit;
-      background: linear-gradient(90deg, #38bdf8, #22c55e);
-      transition: width 0.35s ease;
-    }
+  .nav-item.active .num { color: var(--accent); }
 
-    main {
-      position: relative;
-      z-index: 1;
-      flex: 1;
-      padding: 18px 22px 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
+  .nav-item .icon { font-size: 1rem; }
 
-    .slide {
-      display: none;
-      background: radial-gradient(circle at top left, rgba(15, 118, 110, 0.18), transparent 55%),
-                  radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16), transparent 60%),
-                  linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.98));
-      border-radius: var(--radius);
-      border: 1px solid rgba(148, 163, 184, 0.35);
-      padding: 20px 22px 18px;
-      box-shadow: 0 14px 35px rgba(15, 23, 42, 0.9);
-      animation: fadeIn 0.35s ease;
-    }
+  /* MAIN CONTENT */
+  .main {
+    margin-left: 260px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+  }
 
-    .slide.active {
-      display: block;
-    }
+  .section {
+    display: none;
+    padding: 3rem;
+    max-width: 900px;
+    animation: fadeSlide 0.4s ease;
+  }
 
-    .slide-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
+  .section.active { display: block; }
 
-    .slide-kicker {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: var(--accent);
-      font-weight: 600;
-    }
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
-    .slide-title {
-      font-size: 20px;
-      font-weight: 600;
-      margin-top: 2px;
-    }
+  /* SECTION HEADER */
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
 
-    .slide-tag {
-      font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      color: var(--muted);
-    }
+  .section-tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 0.25rem 0.75rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
 
-    .slide-body {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-      gap: 18px;
-      margin-top: 8px;
-    }
+  .section-title {
+    font-size: 2.8rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+  }
 
-    @media (max-width: 800px) {
-      .slide-body {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: #94a3b8;
+    line-height: 1.7;
+    max-width: 680px;
+  }
 
-    .col {
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 12px;
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      padding: 12px 13px 11px;
-    }
+  /* HERO section */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 4rem;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(0,212,255,0.05) 0%, transparent 70%);
+  }
 
-    .col h3 {
-      font-size: 14px;
-      margin-bottom: 6px;
-      color: #e5e7eb;
-    }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0,212,255,0.1);
+    border: 1px solid rgba(0,212,255,0.3);
+    padding: 0.4rem 1rem;
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    width: fit-content;
+  }
 
-    .col p {
-      font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 6px;
-    }
+  .hero-title {
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1;
+    margin-bottom: 1.5rem;
+  }
 
-    ul {
-      list-style: none;
-      margin-top: 4px;
-    }
+  .hero-title .line1 { color: white; }
+  .hero-title .line2 {
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-    li {
-      font-size: 13px;
-      color: var(--text);
-      margin-bottom: 4px;
-      display: flex;
-      align-items: flex-start;
-      gap: 6px;
-    }
+  .hero-desc {
+    font-size: 1.15rem;
+    color: #94a3b8;
+    line-height: 1.8;
+    max-width: 600px;
+    margin-bottom: 3rem;
+  }
 
-    li::before {
-      content: "•";
-      color: var(--accent);
-      margin-top: 1px;
-      font-size: 14px;
-    }
+  .hero-topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+  }
 
-    .code-block {
-      background: var(--code-bg);
-      border-radius: 10px;
-      border: 1px solid rgba(30, 64, 175, 0.9);
-      padding: 10px 11px;
-      font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 12px;
-      color: #e5e7eb;
-      overflow-x: auto;
-      position: relative;
-    }
+  .topic-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.4rem 0.9rem;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #cbd5e1;
+  }
 
-    .code-label {
-      position: absolute;
-      top: 6px;
-      right: 10px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-    }
+  .topic-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.05);
+  }
 
-    pre {
-      margin: 0;
-      white-space: pre;
-    }
+  /* CODE BLOCK */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin: 1.5rem 0;
+    position: relative;
+  }
 
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      margin-top: 4px;
-    }
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    background: rgba(255,255,255,0.03);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
 
-    .pill {
-      font-size: 11px;
-      padding: 4px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      background: rgba(15, 23, 42, 0.9);
-      color: var(--muted);
-    }
+  .code-dots {
+    display: flex;
+    gap: 6px;
+  }
 
-    .pill.accent {
-      border-color: rgba(56, 189, 248, 0.8);
-      color: var(--accent);
-      background: rgba(15, 23, 42, 0.9);
-    }
+  .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+  }
 
-    .activity {
-      margin-top: 4px;
-      padding: 8px 9px;
-      border-radius: 10px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px dashed rgba(148, 163, 184, 0.6);
-      font-size: 12px;
-      color: var(--muted);
-    }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
 
-    .activity strong {
-      color: var(--accent);
-      font-weight: 600;
-    }
+  .code-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 999px;
-      background: rgba(22, 163, 74, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.7);
-      color: #bbf7d0;
-      margin-top: 4px;
-    }
+  .code-content {
+    padding: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.83rem;
+    line-height: 1.8;
+    overflow-x: auto;
+    color: #e2e8f0;
+  }
 
-    .badge.danger {
-      background: rgba(248, 113, 113, 0.12);
-      border-color: rgba(248, 113, 113, 0.8);
-      color: #fecaca;
-    }
+  .code-content .kw { color: #c678dd; }
+  .code-content .str { color: #98c379; }
+  .code-content .num { color: #d19a66; }
+  .code-content .fn { color: #61afef; }
+  .code-content .cmt { color: #5c6370; font-style: italic; }
+  .code-content .op { color: #56b6c2; }
+  .code-content .var { color: #e06c75; }
 
-    footer {
-      position: relative;
-      z-index: 1;
-      padding: 10px 18px 14px;
-      border-top: 1px solid rgba(148, 163, 184, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      font-size: 12px;
-      color: var(--muted);
-      background: linear-gradient(to right, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.9));
-      backdrop-filter: blur(10px);
-    }
+  /* CARDS */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
 
-    .nav-buttons {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
 
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 7px 14px;
-      font-size: 12px;
-      font-weight: 500;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(15, 23, 42, 0.95);
-      color: var(--text);
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      transition: background 0.18s ease, transform 0.12s ease, border-color 0.18s ease;
-    }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
 
-    button.primary {
-      background: linear-gradient(135deg, #38bdf8, #22c55e);
-      color: #0f172a;
-      border-color: transparent;
-      box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
-    }
+  .card.blue::before { background: #3b82f6; }
+  .card.green::before { background: var(--accent3); }
+  .card.purple::before { background: var(--accent2); }
+  .card.amber::before { background: var(--accent4); }
+  .card.cyan::before { background: var(--accent); }
 
-    button:disabled {
-      opacity: 0.45;
-      cursor: default;
-      box-shadow: none;
-    }
+  .card:hover {
+    border-color: rgba(0,212,255,0.3);
+    transform: translateY(-2px);
+    background: var(--surface2);
+  }
 
-    button:not(:disabled):hover {
-      transform: translateY(-1px);
-      background: rgba(15, 23, 42, 0.9);
-    }
+  .card-icon { font-size: 1.8rem; margin-bottom: 0.75rem; }
+  .card-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.4rem;
+  }
+  .card-type {
+    font-size: 0.72rem;
+    color: var(--muted);
+    margin-bottom: 0.75rem;
+  }
+  .card-example {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent3);
+    background: rgba(16,185,129,0.08);
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    display: inline-block;
+  }
 
-    button.primary:not(:disabled):hover {
-      background: linear-gradient(135deg, #0ea5e9, #16a34a);
-    }
+  .card-desc {
+    font-size: 0.82rem;
+    color: #94a3b8;
+    line-height: 1.6;
+  }
 
-    .hint {
-      font-size: 11px;
-      color: var(--muted);
-    }
+  /* INFO BOX */
+  .info-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+  }
 
-    .hint span {
-      padding: 2px 6px;
-      border-radius: 6px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
-      margin: 0 2px;
-    }
+  .info-box.warning { border-left-color: var(--accent4); }
+  .info-box.success { border-left-color: var(--accent3); }
+  .info-box.purple { border-left-color: var(--accent2); }
 
-    .slide-index {
-      font-size: 11px;
-      color: var(--muted);
-    }
+  .info-box-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(6px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  .info-box.warning .info-box-title { color: var(--accent4); }
+  .info-box.success .info-box-title { color: var(--accent3); }
+  .info-box.purple .info-box-title { color: var(--accent2); }
 
-    .highlight {
-      color: var(--accent);
-      font-weight: 500;
-    }
-  </style>
+  .info-box p { font-size: 0.88rem; color: #cbd5e1; line-height: 1.7; }
+
+  /* OPERATOR TABLE */
+  .op-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.85rem;
+  }
+
+  .op-table th {
+    background: rgba(0,212,255,0.08);
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .op-table td {
+    padding: 0.7rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: #cbd5e1;
+    vertical-align: middle;
+  }
+
+  .op-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .op-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    background: var(--code-bg);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 0.2rem 0.6rem;
+    border-radius: 5px;
+    color: var(--accent);
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 0.25rem;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tab-btn {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.8rem;
+    font-family: 'Space Mono', monospace;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-btn:hover:not(.active) {
+    color: var(--text);
+  }
+
+  .tab-panels .tab-panel { display: none; }
+  .tab-panels .tab-panel.active { display: block; }
+
+  /* PROGRESS */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    z-index: 200;
+    transition: width 0.3s ease;
+  }
+
+  /* SECTION CONTENT */
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: white;
+    margin: 2rem 0 1rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 1.5rem 0 0.75rem;
+  }
+
+  p {
+    color: #94a3b8;
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    font-size: 0.92rem;
+  }
+
+  .highlight { color: var(--accent); font-weight: 600; }
+  .highlight-g { color: var(--accent3); font-weight: 600; }
+  .highlight-p { color: var(--accent2); font-weight: 600; }
+  .highlight-a { color: var(--accent4); font-weight: 600; }
+
+  /* FLOW DIAGRAM */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+
+  .flow-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 1.2rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 1.2rem;
+  }
+
+  /* MOBILE TOGGLE */
+  .mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 1rem; right: 1rem;
+    z-index: 200;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    color: white;
+    font-size: 1.2rem;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2rem 0;
+  }
+
+  /* LIST STYLED */
+  .styled-list {
+    list-style: none;
+    margin: 1rem 0;
+  }
+
+  .styled-list li {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .styled-list li::before {
+    content: '→';
+    color: var(--accent);
+    font-family: monospace;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* QUIZ */
+  .quiz-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .quiz-q {
+    font-weight: 600;
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+  }
+
+  .quiz-options {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .quiz-opt {
+    background: var(--code-bg);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 0.65rem 1rem;
+    cursor: pointer;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    transition: all 0.2s;
+    text-align: left;
+  }
+
+  .quiz-opt:hover { border-color: var(--accent); color: var(--accent); }
+  .quiz-opt.correct { border-color: var(--accent3); color: var(--accent3); background: rgba(16,185,129,0.08); }
+  .quiz-opt.wrong { border-color: #ef4444; color: #ef4444; background: rgba(239,68,68,0.08); }
+
+  .quiz-feedback {
+    margin-top: 0.75rem;
+    font-size: 0.82rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(16,185,129,0.1); color: var(--accent3); }
+  .quiz-feedback.fail { background: rgba(239,68,68,0.1); color: #f87171; }
+
+  /* SCOPE DIAGRAM */
+  .scope-diagram {
+    border: 2px solid rgba(124,58,237,0.4);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    position: relative;
+  }
+
+  .scope-diagram::before {
+    content: 'ÁMBITO GLOBAL';
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent2);
+    letter-spacing: 0.1em;
+  }
+
+  .scope-inner {
+    border: 2px solid rgba(0,212,255,0.3);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    position: relative;
+  }
+
+  .scope-inner::before {
+    content: 'ÁMBITO LOCAL (función)';
+    position: absolute;
+    top: -10px; left: 12px;
+    background: var(--bg);
+    padding: 0 8px;
+    font-size: 0.65rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar { transform: translateX(-100%); }
+    .sidebar.open { transform: translateX(0); }
+    .main { margin-left: 0; }
+    .section { padding: 2rem 1.5rem; }
+    .hero { padding: 2rem 1.5rem; }
+    .hero-title { font-size: 2.8rem; }
+    .mobile-toggle { display: block; }
+  }
+</style>
 </head>
 <body>
-  <div class="app">
-    <header>
-      <div class="title-block">
-        <div class="logo">Py</div>
-        <div class="title-text">
-          <h1>Introducción a Python</h1>
-          <p>Variables, tipos, entrada/salida y conversiones</p>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="py-badge">🐍 Python</div>
+    <h1>Fundamentos de Programación</h1>
+    <p>Temario introductorio completo</p>
+  </div>
+
+  <div class="nav-section">Inicio</div>
+  <div class="nav-item active" onclick="showSection('hero')">
+    <span class="icon">🏠</span><span class="num">—</span>Presentación
+  </div>
+
+  <div class="nav-section">Conceptos Base</div>
+  <div class="nav-item" onclick="showSection('tipos')">
+    <span class="icon">📦</span><span class="num">1.5</span>Tipos de datos
+  </div>
+  <div class="nav-item" onclick="showSection('variables')">
+    <span class="icon">📦</span><span class="num">1.6</span>Variables y constantes
+  </div>
+  <div class="nav-item" onclick="showSection('operadores')">
+    <span class="icon">⚙️</span><span class="num">1.7</span>Operadores
+  </div>
+  <div class="nav-item" onclick="showSection('comentarios')">
+    <span class="icon">💬</span><span class="num">1.8</span>Comentarios
+  </div>
+
+  <div class="nav-section">Entrada / Salida</div>
+  <div class="nav-item" onclick="showSection('io')">
+    <span class="icon">🖥️</span><span class="num">1.9</span>Interacción usuario
+  </div>
+
+  <div class="nav-section">Control de Flujo</div>
+  <div class="nav-item" onclick="showSection('condicionales')">
+    <span class="icon">🔀</span><span class="num">1.10.1</span>Condicionales
+  </div>
+  <div class="nav-item" onclick="showSection('bucles')">
+    <span class="icon">🔁</span><span class="num">1.10.2</span>Bucles
+  </div>
+  <div class="nav-item" onclick="showSection('salto')">
+    <span class="icon">⏭️</span><span class="num">1.10.3</span>Salto (break/continue)
+  </div>
+
+  <div class="nav-section">Estructuras de Datos</div>
+  <div class="nav-item" onclick="showSection('listas')">
+    <span class="icon">📋</span><span class="num">1.11.1</span>Listas
+  </div>
+  <div class="nav-item" onclick="showSection('diccionarios')">
+    <span class="icon">📖</span><span class="num">1.11.2</span>Diccionarios
+  </div>
+
+  <div class="nav-section">Organización</div>
+  <div class="nav-item" onclick="showSection('funciones')">
+    <span class="icon">🔧</span><span class="num">1.12</span>Funciones y módulos
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <section class="section hero active" id="section-hero">
+    <div class="hero-badge">✦ Material didáctico interactivo</div>
+    <h1 class="hero-title">
+      <span class="line1">Fundamentos</span><br>
+      <span class="line2">Python</span>
+    </h1>
+    <p class="hero-desc">
+      Aprende los pilares de la programación en Python: tipos de datos, variables, operadores, estructuras de control, datos y funciones. Todo con ejemplos claros y prácticos.
+    </p>
+    <div class="hero-topics">
+      <div class="topic-chip" onclick="showSection('tipos')">📦 Tipos de datos</div>
+      <div class="topic-chip" onclick="showSection('variables')">🗄️ Variables</div>
+      <div class="topic-chip" onclick="showSection('operadores')">⚙️ Operadores</div>
+      <div class="topic-chip" onclick="showSection('io')">🖥️ Input / Output</div>
+      <div class="topic-chip" onclick="showSection('condicionales')">🔀 if / elif / else</div>
+      <div class="topic-chip" onclick="showSection('bucles')">🔁 for / while</div>
+      <div class="topic-chip" onclick="showSection('listas')">📋 Listas</div>
+      <div class="topic-chip" onclick="showSection('diccionarios')">📖 Diccionarios</div>
+      <div class="topic-chip" onclick="showSection('funciones')">🔧 Funciones</div>
+    </div>
+    <div class="info-box success">
+      <div class="info-box-title">💡 Cómo usar esta presentación</div>
+      <p>Navega por los temas usando el menú lateral. Cada sección incluye explicación, ejemplos de código comentados y, en algunos casos, ejercicios interactivos.</p>
+    </div>
+  </section>
+
+  <!-- 1.5 TIPOS DE DATOS -->
+  <section class="section" id="section-tipos">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.5</div>
+      <h1 class="section-title">Tipos de datos</h1>
+      <p class="section-subtitle">Cuando programamos, operamos sobre datos. Cada dato tiene un tipo que determina qué podemos hacer con él y cómo se almacena en memoria.</p>
+    </div>
+
+    <p>Imagina que quieres guardar el peso de una persona (84,25 Kg), el número de asistentes a un evento (13.437) y el nombre de un día de la semana ("Lunes"). Cada uno necesita un tipo de dato diferente.</p>
+
+    <div class="card-grid">
+      <div class="card blue">
+        <div class="card-icon">🔢</div>
+        <div class="card-title">int</div>
+        <div class="card-type">Entero (Integer)</div>
+        <p class="card-desc" style="font-size:0.78rem; margin:0 0 0.75rem;">Números enteros, sin decimales. Ideales para contar cosas.</p>
+        <div class="card-example">x = 5</div>
+      </div>
+      <div class="card green">
+        <div class="card-icon">📐</div>
+        <div class="card-title">float</div>
+        <div class="card-type">Punto flotante (Decimal)</div>
+        <p class="card-desc" style="font-size:0.78rem; margin:0 0 0.75rem;">Números reales con parte decimal. Usa punto, no coma.</p>
+        <div class="card-example">y = 3.14</div>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">📝</div>
+        <div class="card-title">str</div>
+        <div class="card-type">Cadena de texto (String)</div>
+        <p class="card-desc" style="font-size:0.78rem; margin:0 0 0.75rem;">Secuencias de caracteres. Se escriben entre comillas simples o dobles.</p>
+        <div class="card-example">"Hola mundo"</div>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">✅</div>
+        <div class="card-title">bool</div>
+        <div class="card-type">Booleano (Boolean)</div>
+        <p class="card-desc" style="font-size:0.78rem; margin:0 0 0.75rem;">Solo dos valores posibles: verdadero o falso.</p>
+        <div class="card-example">True / False</div>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Python — ejemplos de cada tipo</span>
+      </div>
+      <div class="code-content">
+<span class="cmt"># int — número entero</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="num">25</span>
+<span class="var">asistentes</span> <span class="op">=</span> <span class="num">13437</span>
+
+<span class="cmt"># float — número con decimales</span>
+<span class="var">peso</span> <span class="op">=</span> <span class="num">84.25</span>
+<span class="var">pi</span> <span class="op">=</span> <span class="num">3.14159</span>
+
+<span class="cmt"># str — cadena de texto (entre comillas simples o dobles)</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Juan"</span>
+<span class="var">dia</span> <span class="op">=</span> <span class="str">'Lunes'</span>
+
+<span class="cmt"># bool — verdadero o falso</span>
+<span class="var">sesion_iniciada</span> <span class="op">=</span> <span class="kw">True</span>
+<span class="var">esta_lloviendo</span> <span class="op">=</span> <span class="kw">False</span>
+      </div>
+    </div>
+
+    <div class="info-box warning">
+      <div class="info-box-title">⚠️ Ojo con los decimales</div>
+      <p>En Python, los números decimales usan el <strong>punto</strong> como separador decimal, no la coma. Escribe <code style="color:var(--accent3)">3.14</code> y no <code style="color:#ef4444">3,14</code>.</p>
+    </div>
+  </section>
+
+  <!-- 1.6 VARIABLES -->
+  <section class="section" id="section-variables">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.6</div>
+      <h1 class="section-title">Variables y constantes</h1>
+      <p class="section-subtitle">Las variables son espacios en la memoria del ordenador donde guardamos datos para usarlos a lo largo del programa.</p>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-title">🗄️ La metáfora del cajón</div>
+      <p>Piensa en una variable como un <strong>cajón con nombre</strong>. Puedes meter datos, cambiarlos o borrarlos. Para acceder a ellos, solo necesitas el nombre del cajón.</p>
+    </div>
+
+    <h2>Variables</h2>
+    <p>En Python, crear una variable es tan sencillo como escribir su nombre, el signo <span class="highlight">igual (=)</span> y el valor que quieres guardar. Python detecta automáticamente el tipo de dato.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Python — declaración de variables</span>
+      </div>
+      <div class="code-content">
+<span class="var">edad</span> <span class="op">=</span> <span class="num">25</span>               <span class="cmt"># int</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Juan"</span>          <span class="cmt"># str</span>
+<span class="var">altura</span> <span class="op">=</span> <span class="num">1.75</span>             <span class="cmt"># float</span>
+<span class="var">es_estudiante</span> <span class="op">=</span> <span class="kw">True</span>    <span class="cmt"># bool</span>
+
+<span class="cmt"># Podemos cambiar el valor en cualquier momento</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="num">26</span>                 <span class="cmt"># la variable edad ahora vale 26</span>
+      </div>
+    </div>
+
+    <h2>Constantes</h2>
+    <p>Las constantes son como variables, pero su valor <strong>no debe cambiar</strong> durante el programa. Para distinguirlas, se escriben en <span class="highlight">MAYÚSCULAS</span>. Python no las bloquea técnicamente, pero es una convención que todos los programadores respetan.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Python — constantes (nombres en MAYÚSCULAS)</span>
+      </div>
+      <div class="code-content">
+<span class="var">PI</span> <span class="op">=</span> <span class="num">3.14159</span>
+<span class="var">GRAVEDAD</span> <span class="op">=</span> <span class="num">9.81</span>
+<span class="var">VELOCIDAD_LUZ</span> <span class="op">=</span> <span class="num">299792458</span>
+      </div>
+    </div>
+
+    <div class="card-grid">
+      <div class="card cyan">
+        <div class="card-icon">🔄</div>
+        <div class="card-title">Variable</div>
+        <div class="card-type">Valor que puede cambiar</div>
+        <p class="card-desc" style="font-size:0.78rem;margin:0">nombre en <span style="color:var(--accent)">minúsculas</span> o con guion bajo</p>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">🔒</div>
+        <div class="card-title">Constante</div>
+        <div class="card-type">Valor fijo, no debe cambiar</div>
+        <p class="card-desc" style="font-size:0.78rem;margin:0">nombre en <span style="color:var(--accent4)">MAYÚSCULAS</span> (convención)</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.7 OPERADORES -->
+  <section class="section" id="section-operadores">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.7</div>
+      <h1 class="section-title">Operadores y expresiones</h1>
+      <p class="section-subtitle">Los operadores permiten realizar cálculos, comparaciones y operaciones lógicas sobre los datos.</p>
+    </div>
+
+    <div class="tabs" id="op-tabs">
+      <button class="tab-btn active" onclick="switchTab('op', 'arit')">Aritméticos</button>
+      <button class="tab-btn" onclick="switchTab('op', 'comp')">Comparación</button>
+      <button class="tab-btn" onclick="switchTab('op', 'log')">Lógicos</button>
+      <button class="tab-btn" onclick="switchTab('op', 'prec')">Precedencia</button>
+      <button class="tab-btn" onclick="switchTab('op', 'str')">Con strings</button>
+    </div>
+
+    <div class="tab-panels" id="op-panels">
+      <!-- ARITMÉTICOS -->
+      <div class="tab-panel active" id="op-arit">
+        <table class="op-table">
+          <thead>
+            <tr><th>Operador</th><th>Nombre</th><th>Ejemplo</th><th>Resultado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="op-badge">+</span></td><td>Suma</td><td><code style="color:#98c379">10 + 5</code></td><td style="color:var(--accent3)">15</td></tr>
+            <tr><td><span class="op-badge">-</span></td><td>Resta</td><td><code style="color:#98c379">10 - 5</code></td><td style="color:var(--accent3)">5</td></tr>
+            <tr><td><span class="op-badge">*</span></td><td>Multiplicación</td><td><code style="color:#98c379">10 * 5</code></td><td style="color:var(--accent3)">50</td></tr>
+            <tr><td><span class="op-badge">/</span></td><td>División (float)</td><td><code style="color:#98c379">10 / 5</code></td><td style="color:var(--accent3)">2.0</td></tr>
+            <tr><td><span class="op-badge">//</span></td><td>División entera</td><td><code style="color:#98c379">10 // 3</code></td><td style="color:var(--accent3)">3</td></tr>
+            <tr><td><span class="op-badge">%</span></td><td>Módulo (resto)</td><td><code style="color:#98c379">10 % 3</code></td><td style="color:var(--accent3)">1</td></tr>
+            <tr><td><span class="op-badge">**</span></td><td>Exponenciación</td><td><code style="color:#98c379">2 ** 8</code></td><td style="color:var(--accent3)">256</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplo práctico</span>
+          </div>
+          <div class="code-content">
+<span class="var">a</span> <span class="op">=</span> <span class="num">10</span>
+<span class="var">b</span> <span class="op">=</span> <span class="num">5</span>
+
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">+</span> <span class="var">b</span>)    <span class="cmt"># 15</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">-</span> <span class="var">b</span>)    <span class="cmt"># 5</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">*</span> <span class="var">b</span>)    <span class="cmt"># 50</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">/</span> <span class="var">b</span>)    <span class="cmt"># 2.0  (siempre devuelve float)</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">//</span> <span class="var">b</span>)   <span class="cmt"># 2    (parte entera)</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">%</span> <span class="var">b</span>)    <span class="cmt"># 0    (resto)</span>
+<span class="fn">print</span>(<span class="var">a</span> <span class="op">**</span> <span class="var">b</span>)   <span class="cmt"># 100000</span>
+          </div>
         </div>
       </div>
-      <div class="progress">
-        <span id="progress-label">Diapositiva 1</span>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progress-fill"></div>
+
+      <!-- COMPARACIÓN -->
+      <div class="tab-panel" id="op-comp">
+        <p>Los operadores de comparación evalúan si algo es verdad y devuelven <span class="highlight-g">True</span> o <span class="highlight-a">False</span>. Son como hacerse una pregunta de sí/no.</p>
+        <table class="op-table">
+          <thead>
+            <tr><th>Operador</th><th>Significado</th><th>Ejemplo</th><th>Resultado</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><span class="op-badge">==</span></td><td>Igual a</td><td><code style="color:#98c379">7 == 12</code></td><td style="color:#ef4444">False</td></tr>
+            <tr><td><span class="op-badge">!=</span></td><td>Distinto de</td><td><code style="color:#98c379">7 != 12</code></td><td style="color:var(--accent3)">True</td></tr>
+            <tr><td><span class="op-badge">&gt;</span></td><td>Mayor que</td><td><code style="color:#98c379">7 &gt; 12</code></td><td style="color:#ef4444">False</td></tr>
+            <tr><td><span class="op-badge">&lt;</span></td><td>Menor que</td><td><code style="color:#98c379">7 &lt; 12</code></td><td style="color:var(--accent3)">True</td></tr>
+            <tr><td><span class="op-badge">&gt;=</span></td><td>Mayor o igual</td><td><code style="color:#98c379">12 &gt;= 12</code></td><td style="color:var(--accent3)">True</td></tr>
+            <tr><td><span class="op-badge">&lt;=</span></td><td>Menor o igual</td><td><code style="color:#98c379">5 &lt;= 3</code></td><td style="color:#ef4444">False</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplo — comparando edad</span>
+          </div>
+          <div class="code-content">
+<span class="var">edad</span> <span class="op">=</span> <span class="num">17</span>
+
+<span class="fn">print</span>(<span class="var">edad</span> <span class="op">></span> <span class="num">18</span>)    <span class="cmt"># False  — ¿Es mayor de 18?</span>
+<span class="fn">print</span>(<span class="var">edad</span> <span class="op">==</span> <span class="num">18</span>)   <span class="cmt"># False  — ¿Tiene exactamente 18?</span>
+<span class="fn">print</span>(<span class="var">edad</span> <span class="op"><</span> <span class="num">18</span>)    <span class="cmt"># True   — ¿Es menor de 18?</span>
+<span class="fn">print</span>(<span class="var">edad</span> <span class="op">!=</span> <span class="num">18</span>)   <span class="cmt"># True   — ¿Es distinto de 18?</span>
+          </div>
         </div>
       </div>
-    </header>
 
-    <main>
-      <!-- SLIDE 1 -->
-      <section class="slide active">
-        <div class="slide-header">
-          <div>
-            <div class="slide-kicker">Portada</div>
-            <div class="slide-title">Bienvenido a Python</div>
+      <!-- LÓGICOS -->
+      <div class="tab-panel" id="op-log">
+        <p>Trabajan con valores booleanos y sirven para combinar condiciones.</p>
+        <div class="card-grid">
+          <div class="card blue">
+            <div class="card-icon">🤝</div>
+            <div class="card-title">and</div>
+            <div class="card-type">Las DOS condiciones deben ser True</div>
+            <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Como cruzar: semáforo verde AND no vienen coches → cruzar</p>
           </div>
-          <div class="slide-tag">Contexto</div>
-        </div>
-        <div class="slide-body">
-          <div class="col">
-            <h3>¿Qué es Python?</h3>
-            <p>Un lenguaje de programación <span class="highlight">interpretado</span>, legible y muy usado en el mundo real.</p>
-            <ul>
-              <li>Ideal para empezar a programar.</li>
-              <li>Usado en ciencia de datos, web, automatización, IA…</li>
-              <li>Gran comunidad y mucha documentación.</li>
-            </ul>
-            <div class="activity">
-              <strong>Pregunta al grupo:</strong> ¿Dónde habéis visto o escuchado Python antes?
-            </div>
+          <div class="card green">
+            <div class="card-icon">🔓</div>
+            <div class="card-title">or</div>
+            <div class="card-type">Al menos UNA condición es True</div>
+            <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Basta con que se cumpla una sola de las condiciones</p>
           </div>
-          <div class="col">
-            <h3>¿Dónde escribimos código?</h3>
-            <ul>
-              <li>En archivos <code>.py</code> ejecutados con <code>python archivo.py</code>.</li>
-              <li>En el intérprete interactivo (REPL).</li>
-              <li>En editores como VS Code, Thonny, PyCharm…</li>
-            </ul>
-            <div class="code-block">
-              <span class="code-label">Prueba rápida</span>
-              <pre>print("Hola, Python")</pre>
-            </div>
-            <div class="activity">
-              <strong>Actividad:</strong> que cada persona escriba y ejecute este código en su entorno.
-            </div>
+          <div class="card purple">
+            <div class="card-icon">🔄</div>
+            <div class="card-title">not</div>
+            <div class="card-type">Invierte el valor booleano</div>
+            <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">not True → False<br>not False → True</p>
           </div>
         </div>
-      </section>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplos — operadores lógicos</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># and: ambas deben ser True</span>
+<span class="fn">print</span>(<span class="kw">True</span> <span class="op">and</span> <span class="kw">True</span>)    <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="kw">True</span> <span class="op">and</span> <span class="kw">False</span>)   <span class="cmt"># False</span>
 
-      <!-- SLIDE 2 -->
-      <section class="slide">
-        <div class="slide-header">
-          <div>
-            <div class="slide-kicker">Variables</div>
-            <div class="slide-title">Qué es una variable</div>
+<span class="cmt"># or: basta con que una sea True</span>
+<span class="fn">print</span>(<span class="kw">True</span> <span class="op">or</span> <span class="kw">False</span>)    <span class="cmt"># True</span>
+<span class="fn">print</span>(<span class="kw">False</span> <span class="op">or</span> <span class="kw">False</span>)   <span class="cmt"># False</span>
+
+<span class="cmt"># not: invierte</span>
+<span class="fn">print</span>(<span class="op">not</span> <span class="kw">True</span>)           <span class="cmt"># False</span>
+<span class="fn">print</span>(<span class="op">not</span> <span class="kw">False</span>)          <span class="cmt"># True</span>
+
+<span class="cmt"># Ejemplo real: ¿puedo cruzar?</span>
+<span class="var">semaforo_verde</span> <span class="op">=</span> <span class="kw">True</span>
+<span class="var">no_vienen_coches</span> <span class="op">=</span> <span class="kw">True</span>
+<span class="var">cruzar</span> <span class="op">=</span> <span class="var">semaforo_verde</span> <span class="op">and</span> <span class="var">no_vienen_coches</span>
+<span class="fn">print</span>(<span class="var">cruzar</span>)              <span class="cmt"># True</span>
           </div>
-          <div class="slide-tag">Concepto básico</div>
         </div>
-        <div class="slide-body">
-          <div class="col">
-            <h3>Idea clave</h3>
-            <p>Una variable es un <span class="highlight">nombre que guarda un valor</span> en memoria.</p>
-            <div class="code-block">
-              <span class="code-label">Ejemplo</span>
-              <pre>edad = 25
-nombre = "Ana"
-altura = 1.68
-es_estudiante = True</pre>
+
+        <div class="quiz-box">
+          <div class="quiz-q">🧠 ¿Cuál es el resultado de: <code style="color:var(--accent)">False and False or True</code>?</div>
+          <div class="quiz-options">
+            <button class="quiz-opt" onclick="checkQuiz(this, false, 'q1')">False</button>
+            <button class="quiz-opt" onclick="checkQuiz(this, true, 'q1')">True</button>
+          </div>
+          <div class="quiz-feedback" id="q1-fb"></div>
+        </div>
+      </div>
+
+      <!-- PRECEDENCIA -->
+      <div class="tab-panel" id="op-prec">
+        <p>Python sigue un orden para evaluar operadores, de mayor a menor prioridad:</p>
+        <div style="margin: 1.5rem 0;">
+          <div style="display:flex;flex-direction:column;gap:0.5rem;">
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent);min-width:80px">( )</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Paréntesis — ¡Máxima prioridad!</span>
             </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.3);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent2);min-width:80px">**</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Exponenciación</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:#e2e8f0;min-width:80px">+x, -x</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Signos unarios</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:#e2e8f0;min-width:80px">* / // %</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Multiplicación, división, módulo</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:#e2e8f0;min-width:80px">+ -</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Suma y resta</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:#e2e8f0;min-width:80px">== != > &lt; >= &lt;=</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Operadores de comparación</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;padding:0.7rem 1rem;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);border-radius:8px;">
+              <span style="font-family:'Space Mono',monospace;font-size:0.85rem;color:var(--accent4);min-width:80px">not and or</span>
+              <span style="font-size:0.82rem;color:#cbd5e1">Operadores lógicos (en este orden)</span>
+            </div>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Expresiones compuestas</span>
+          </div>
+          <div class="code-content">
+<span class="var">a</span> <span class="op">=</span> <span class="num">5</span><span class="op">,</span> <span class="var">b</span> <span class="op">=</span> <span class="num">3</span><span class="op">,</span> <span class="var">c</span> <span class="op">=</span> <span class="num">2</span><span class="op">,</span> <span class="var">d</span> <span class="op">=</span> <span class="num">4</span>
+
+<span class="cmt"># Expresión 1: primero paréntesis, luego *, luego /</span>
+<span class="var">resultado</span> <span class="op">=</span> (<span class="var">a</span> <span class="op">+</span> <span class="var">b</span>) <span class="op">*</span> <span class="var">c</span> <span class="op">/</span> <span class="var">d</span>
+<span class="cmt"># = (5+3) * 2 / 4 = 8 * 2 / 4 = 16 / 4 = 4.0</span>
+
+<span class="cmt"># Expresión 2: primero **, luego *, luego + y -</span>
+<span class="var">resultado</span> <span class="op">=</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span> <span class="op">*</span> <span class="var">c</span> <span class="op">**</span> <span class="var">d</span> <span class="op">-</span> (<span class="var">a</span> <span class="op">/</span> <span class="var">b</span>)
+<span class="cmt"># = 5 + 3 * (2**4) - (5/3)</span>
+<span class="cmt"># = 5 + 3 * 16 - 1.666...</span>
+<span class="cmt"># = 5 + 48 - 1.666... = 51.333...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- STRINGS -->
+      <div class="tab-panel" id="op-str">
+        <p>Python también permite usar operadores con cadenas de texto:</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Operaciones con strings</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Concatenar (unir) cadenas con +</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Juan"</span>
+<span class="var">saludo</span> <span class="op">=</span> <span class="str">"Hola, "</span> <span class="op">+</span> <span class="var">nombre</span> <span class="op">+</span> <span class="str">"!"</span>
+<span class="fn">print</span>(<span class="var">saludo</span>)    <span class="cmt"># Hola, Juan!</span>
+
+<span class="cmt"># Repetir cadenas con *</span>
+<span class="var">repetir</span> <span class="op">=</span> <span class="str">"Hola"</span> <span class="op">*</span> <span class="num">3</span>
+<span class="fn">print</span>(<span class="var">repetir</span>)   <span class="cmt"># HolaHolaHola</span>
+
+<span class="cmt"># F-strings (forma moderna y elegante)</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Ana"</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="num">30</span>
+<span class="fn">print</span>(<span class="str">f"Nombre: {<span class="var">nombre</span>}, Edad: {<span class="var">edad</span>}"</span>)
+<span class="cmt"># Nombre: Ana, Edad: 30</span>
+          </div>
+        </div>
+        <div class="info-box success">
+          <div class="info-box-title">✨ F-strings — la forma más cómoda</div>
+          <p>Las f-strings permiten insertar variables directamente en el texto poniendo una <strong>f</strong> antes de las comillas y el nombre de la variable entre <strong>{ }</strong>. Son más legibles que usar el operador +.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.8 COMENTARIOS -->
+  <section class="section" id="section-comentarios">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.8</div>
+      <h1 class="section-title">Comentarios</h1>
+      <p class="section-subtitle">Los comentarios son notas que los programadores se dejan a sí mismos (y a otros). El ordenador los ignora completamente: no se ejecutan.</p>
+    </div>
+
+    <div class="info-box purple">
+      <div class="info-box-title">💡 ¿Para qué sirven?</div>
+      <p>Explican qué hace el código, por qué se tomó una decisión de diseño, o documentan funciones y módulos. Son esenciales para el mantenimiento del código a largo plazo.</p>
+    </div>
+
+    <div class="card-grid" style="grid-template-columns:1fr 1fr">
+      <div class="card cyan">
+        <div class="card-icon">📌</div>
+        <div class="card-title">Una línea</div>
+        <div class="card-type">Símbolo #</div>
+        <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Todo lo que viene después del # en esa línea es un comentario.</p>
+      </div>
+      <div class="card purple">
+        <div class="card-icon">📜</div>
+        <div class="card-title">Multilínea</div>
+        <div class="card-type">Triple comillas """ o '''</div>
+        <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Se usan para comentarios largos, documentación de funciones, etc.</p>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Python — tipos de comentarios</span>
+      </div>
+      <div class="code-content">
+<span class="cmt"># Este es un comentario de una sola línea</span>
+<span class="var">x</span> <span class="op">=</span> <span class="num">5</span>  <span class="cmt"># También puedes comentar al final de una instrucción</span>
+
+<span class="str">"""
+Este es un comentario multilínea.
+Puede ser utilizado para proporcionar descripciones detalladas
+de funciones, clases o módulos.
+También se usa para explicar por qué el programador
+tomó una decisión de diseño concreta y no otra.
+"""</span>
+
+<span class="kw">def</span> <span class="fn">calcular_area</span>(<span class="var">base</span>, <span class="var">altura</span>):
+    <span class="str">"""
+    Calcula el área de un triángulo.
+    Parámetros:
+        base: longitud de la base en cm
+        altura: altura del triángulo en cm
+    Retorna: el área en cm²
+    """</span>
+    <span class="kw">return</span> (<span class="var">base</span> <span class="op">*</span> <span class="var">altura</span>) <span class="op">/</span> <span class="num">2</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.9 INPUT / OUTPUT -->
+  <section class="section" id="section-io">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.9</div>
+      <h1 class="section-title">Interacción con el usuario</h1>
+      <p class="section-subtitle">Todo programa útil muestra datos al usuario (output) y puede leer lo que el usuario escribe (input).</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('io', 'out')">print() — Output</button>
+      <button class="tab-btn" onclick="switchTab('io', 'in')">input() — Input</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="io-out">
+        <p>La función <span class="highlight">print()</span> muestra datos en pantalla. Es muy flexible.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Sintaxis de print()</span>
+          </div>
+          <div class="code-content">
+<span class="fn">print</span>(<span class="var">valor1</span>, <span class="var">valor2</span>, ..., <span class="var">sep</span><span class="op">=</span><span class="str">' '</span>, <span class="var">end</span><span class="op">=</span><span class="str">'\n'</span>)
+
+<span class="cmt"># valor1, valor2… → lo que queremos mostrar</span>
+<span class="cmt"># sep → separador entre valores (defecto: espacio)</span>
+<span class="cmt"># end → qué poner al final (defecto: salto de línea)</span>
+          </div>
+        </div>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplos prácticos</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Mostrar texto simple</span>
+<span class="fn">print</span>(<span class="str">"Hola, mundo"</span>)
+<span class="cmt"># → Hola, mundo</span>
+
+<span class="cmt"># Mostrar múltiples valores</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Juan"</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="num">25</span>
+<span class="fn">print</span>(<span class="str">"Nombre:"</span>, <span class="var">nombre</span>, <span class="str">"Edad:"</span>, <span class="var">edad</span>)
+<span class="cmt"># → Nombre: Juan Edad: 25</span>
+
+<span class="cmt"># Cambiar el separador</span>
+<span class="fn">print</span>(<span class="str">"Python"</span>, <span class="str">"es"</span>, <span class="str">"genial"</span>, <span class="var">sep</span><span class="op">=</span><span class="str">'-'</span>, <span class="var">end</span><span class="op">=</span><span class="str">'!\n'</span>)
+<span class="cmt"># → Python-es-genial!</span>
+
+<span class="cmt"># F-string — más elegante y legible</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="str">"Ana"</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="num">30</span>
+<span class="fn">print</span>(<span class="str">f"Nombre: {<span class="var">nombre</span>}, Edad: {<span class="var">edad</span>}"</span>)
+<span class="cmt"># → Nombre: Ana, Edad: 30</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="io-in">
+        <p>La función <span class="highlight">input()</span> lee lo que el usuario escribe por teclado. <strong>Siempre devuelve texto (str)</strong>, así que si necesitas un número, debes convertirlo.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Leer distintos tipos de datos</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Leer texto (str) — no necesita conversión</span>
+<span class="var">nombre</span> <span class="op">=</span> <span class="fn">input</span>(<span class="str">"Introduce tu nombre: "</span>)
+<span class="fn">print</span>(<span class="str">"Hola"</span>, <span class="var">nombre</span>)
+
+<span class="cmt"># Leer un número entero — convertir con int()</span>
+<span class="var">edad</span> <span class="op">=</span> <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Introduce tu edad: "</span>))
+<span class="fn">print</span>(<span class="str">"Tienes"</span>, <span class="var">edad</span>, <span class="str">"años"</span>)
+
+<span class="cmt"># Leer un número decimal — convertir con float()</span>
+<span class="var">altura</span> <span class="op">=</span> <span class="fn">float</span>(<span class="fn">input</span>(<span class="str">"Introduce tu altura en metros: "</span>))
+<span class="fn">print</span>(<span class="str">"Mides"</span>, <span class="var">altura</span>, <span class="str">"metros"</span>)
+          </div>
+        </div>
+        <div class="info-box warning">
+          <div class="info-box-title">⚠️ input() siempre devuelve str</div>
+          <p>Si el usuario escribe <code style="color:var(--accent3)">25</code>, Python lo recibe como la cadena <code style="color:var(--accent3)">"25"</code>, no como el número 25. Para hacer operaciones matemáticas, convierte con <strong>int()</strong> o <strong>float()</strong>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.10.1 CONDICIONALES -->
+  <section class="section" id="section-condicionales">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.10.1</div>
+      <h1 class="section-title">Estructuras condicionales</h1>
+      <p class="section-subtitle">Permiten ejecutar bloques de código solo cuando se cumplen ciertas condiciones. El programa toma decisiones.</p>
+    </div>
+
+    <div class="flow">
+      <div class="flow-box">if condición</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">elif condición2</div>
+      <span class="flow-arrow">→</span>
+      <div class="flow-box">else</div>
+    </div>
+
+    <p>Python usa las palabras clave <span class="highlight">if</span>, <span class="highlight">elif</span> (else if) y <span class="highlight">else</span> para definir condicionales. Los bloques de código anidados se indican con la <strong>tecla tabulador (TAB)</strong>.</p>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Ejemplo completo — clasificar por edad</span>
+      </div>
+      <div class="code-content">
+<span class="var">edad</span> <span class="op">=</span> <span class="num">20</span>
+
+<span class="kw">if</span> <span class="var">edad</span> <span class="op"><</span> <span class="num">18</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Eres menor de edad"</span>)
+<span class="kw">elif</span> <span class="var">edad</span> <span class="op">>=</span> <span class="num">18</span> <span class="op">and</span> <span class="var">edad</span> <span class="op"><</span> <span class="num">65</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Eres un adulto"</span>)
+<span class="kw">else</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"¡Jubilado! Enhorabuena"</span>)
+
+<span class="cmt"># Con edad = 20 → imprime "Eres un adulto"</span>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-title">🔑 La indentación es obligatoria</div>
+      <p>En Python, el <strong>tabulador (TAB)</strong> es la forma de indicar que un bloque de código pertenece a una estructura. Si no indentamos, el programa falla. No es solo estética: es parte de la sintaxis del lenguaje.</p>
+    </div>
+
+    <h3>Flujo de ejecución paso a paso</h3>
+    <ul class="styled-list">
+      <li>Se evalúa la condición del <strong>if</strong>. Si es True, se ejecuta su bloque y se salta el resto.</li>
+      <li>Si el <strong>if</strong> es False, se pasa al <strong>elif</strong> y se evalúa su condición.</li>
+      <li>Si ninguna condición es True, se ejecuta el bloque del <strong>else</strong>.</li>
+      <li>Pueden encadenarse múltiples <strong>elif</strong>; el <strong>else</strong> es siempre opcional.</li>
+    </ul>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">Más ejemplos — if simple y anidado</span>
+      </div>
+      <div class="code-content">
+<span class="cmt"># if simple (sin elif ni else)</span>
+<span class="var">nota</span> <span class="op">=</span> <span class="num">9</span>
+<span class="kw">if</span> <span class="var">nota</span> <span class="op">>=</span> <span class="num">5</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Aprobado"</span>)
+
+<span class="cmt"># Condicional con varias ramas</span>
+<span class="var">nota</span> <span class="op">=</span> <span class="num">7</span>
+<span class="kw">if</span> <span class="var">nota</span> <span class="op"><</span> <span class="num">5</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Suspenso"</span>)
+<span class="kw">elif</span> <span class="var">nota</span> <span class="op"><</span> <span class="num">7</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Bien"</span>)
+<span class="kw">elif</span> <span class="var">nota</span> <span class="op"><</span> <span class="num">9</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Notable"</span>)
+<span class="kw">else</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">"Sobresaliente"</span>)
+<span class="cmt"># Con nota = 7 → "Notable"</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.10.2 BUCLES -->
+  <section class="section" id="section-bucles">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.10.2</div>
+      <h1 class="section-title">Estructuras repetitivas</h1>
+      <p class="section-subtitle">Los bucles (loops) permiten repetir un bloque de código múltiples veces. En Python tenemos dos tipos: <span class="highlight">for</span> y <span class="highlight">while</span>.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('bucle', 'for')">Bucle for</button>
+      <button class="tab-btn" onclick="switchTab('bucle', 'while')">Bucle while</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="bucle-for">
+        <p>El <span class="highlight">bucle for</span> se usa cuando sabemos <strong>exactamente cuántas veces</strong> queremos repetir algo. Se combina frecuentemente con <code style="color:var(--accent3)">range()</code>.</p>
+
+        <div class="card-grid">
+          <div class="card cyan">
+            <div class="card-title">range(n)</div>
+            <div class="card-type">1 parámetro</div>
+            <p class="card-desc" style="font-size:0.78rem;margin:0.5rem 0">Desde 0 hasta n-1</p>
+            <div class="card-example">range(5) → 0,1,2,3,4</div>
+          </div>
+          <div class="card green">
+            <div class="card-title">range(inicio, fin)</div>
+            <div class="card-type">2 parámetros</div>
+            <p class="card-desc" style="font-size:0.78rem;margin:0.5rem 0">Desde inicio hasta fin-1</p>
+            <div class="card-example">range(5,7) → 5,6</div>
+          </div>
+          <div class="card purple">
+            <div class="card-title">range(inicio, fin, paso)</div>
+            <div class="card-type">3 parámetros</div>
+            <p class="card-desc" style="font-size:0.78rem;margin:0.5rem 0">El tercer parámetro es el salto (puede ser negativo)</p>
+            <div class="card-example">range(5,11,2) → 5,7,9</div>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplos con range()</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Un parámetro: 0 hasta n-1</span>
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>)<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)          <span class="cmt"># 0 1 2 3 4</span>
+
+<span class="cmt"># Dos parámetros: inicio hasta fin-1</span>
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>, <span class="num">7</span>)<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)          <span class="cmt"># 5 6</span>
+
+<span class="cmt"># Tres parámetros: paso de 2 en 2</span>
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>, <span class="num">11</span>, <span class="num">2</span>)<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)          <span class="cmt"># 5 7 9</span>
+
+<span class="cmt"># Paso negativo: ir hacia atrás</span>
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">9</span>, <span class="num">2</span>, <span class="op">-</span><span class="num">2</span>)<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)          <span class="cmt"># 9 7 5 3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="bucle-while">
+        <p>El <span class="highlight">bucle while</span> se repite <strong>mientras una condición sea verdadera</strong>. Se usa cuando no sabemos de antemano cuántas iteraciones necesitaremos.</p>
+
+        <div class="info-box warning">
+          <div class="info-box-title">⚠️ ¡Cuidado con los bucles infinitos!</div>
+          <p>Si la condición del while nunca se vuelve False, el bucle correrá para siempre. Asegúrate de que el valor que controla la condición cambie dentro del bucle.</p>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Ejemplos con while</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Contar de 0 a 4</span>
+<span class="var">contador</span> <span class="op">=</span> <span class="num">0</span>
+<span class="kw">while</span> <span class="var">contador</span> <span class="op"><</span> <span class="num">5</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">contador</span>)
+    <span class="var">contador</span> <span class="op">=</span> <span class="var">contador</span> <span class="op">+</span> <span class="num">1</span>   <span class="cmt"># ← IMPORTANTE: actualizar la variable</span>
+<span class="cmt"># Imprime: 0 1 2 3 4</span>
+
+<span class="cmt"># Esperar hasta que el usuario acierte</span>
+<span class="var">secreto</span> <span class="op">=</span> <span class="str">"python"</span>
+<span class="var">intento</span> <span class="op">=</span> <span class="str">""</span>
+<span class="kw">while</span> <span class="var">intento</span> <span class="op">!=</span> <span class="var">secreto</span><span class="op">:</span>
+    <span class="var">intento</span> <span class="op">=</span> <span class="fn">input</span>(<span class="str">"Adivina la palabra: "</span>)
+<span class="fn">print</span>(<span class="str">"¡Correcto!"</span>)
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.10.3 SALTO -->
+  <section class="section" id="section-salto">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.10.3</div>
+      <h1 class="section-title">Estructuras de salto</h1>
+      <p class="section-subtitle">Permiten alterar el flujo normal de los bucles: interrumpirlos antes de tiempo o saltar una iteración.</p>
+    </div>
+
+    <div class="card-grid" style="grid-template-columns:1fr 1fr;">
+      <div class="card green">
+        <div class="card-icon">🛑</div>
+        <div class="card-title">break</div>
+        <div class="card-type">Termina el bucle inmediatamente</div>
+        <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Sale del bucle por completo, aunque la condición siga siendo verdadera.</p>
+      </div>
+      <div class="card amber">
+        <div class="card-icon">⏭️</div>
+        <div class="card-title">continue</div>
+        <div class="card-type">Salta al siguiente ciclo</div>
+        <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Omite el resto del bloque en esa iteración y sigue con la siguiente.</p>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">break — detener el bucle</span>
+      </div>
+      <div class="code-content">
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)<span class="op">:</span>
+    <span class="kw">if</span> <span class="var">numero</span> <span class="op">==</span> <span class="num">5</span><span class="op">:</span>
+        <span class="kw">break</span>             <span class="cmt"># Salir cuando numero valga 5</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)
+<span class="cmt"># Muestra: 0 1 2 3 4  (se para antes del 5)</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-header">
+        <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+        <span class="code-label">continue — saltar una iteración</span>
+      </div>
+      <div class="code-content">
+<span class="kw">for</span> <span class="var">numero</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">10</span>)<span class="op">:</span>
+    <span class="kw">if</span> <span class="var">numero</span> <span class="op">==</span> <span class="num">5</span><span class="op">:</span>
+        <span class="kw">continue</span>          <span class="cmt"># Saltar cuando numero valga 5</span>
+    <span class="fn">print</span>(<span class="var">numero</span>)
+<span class="cmt"># Muestra: 0 1 2 3 4 6 7 8 9  (se salta el 5)</span>
+      </div>
+    </div>
+
+    <div class="quiz-box">
+      <div class="quiz-q">🧠 ¿Qué imprime este código?<br><code style="color:var(--accent);font-size:0.85rem">for i in range(5):<br>&nbsp;&nbsp;&nbsp;&nbsp;if i == 3: continue<br>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code></div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2')">0 1 2 3 4</button>
+        <button class="quiz-opt" onclick="checkQuiz(this, true, 'q2')">0 1 2 4</button>
+        <button class="quiz-opt" onclick="checkQuiz(this, false, 'q2')">0 1 2</button>
+      </div>
+      <div class="quiz-feedback" id="q2-fb"></div>
+    </div>
+  </section>
+
+  <!-- 1.11.1 LISTAS -->
+  <section class="section" id="section-listas">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.11.1</div>
+      <h1 class="section-title">Listas</h1>
+      <p class="section-subtitle">Las listas son colecciones <span class="highlight">ordenadas y mutables</span> de elementos. Se pueden modificar: agregar, cambiar o eliminar elementos.</p>
+    </div>
+
+    <div class="info-box">
+      <div class="info-box-title">📌 Índices — empiezan en 0</div>
+      <p>Cada elemento de una lista ocupa una posición llamada <strong>índice</strong>, que empieza en <strong>0</strong>. Una lista de 3 elementos tiene índices 0, 1 y 2.</p>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:0;margin:1.5rem 0;font-family:'Space Mono',monospace;font-size:0.82rem;">
+      <div style="background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);border-radius:8px 0 0 8px;padding:1rem 1.5rem;color:var(--accent);min-width:90px;text-align:center;">
+        <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem">índice 0</div>
+        "manzana"
+      </div>
+      <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-top:1px solid rgba(0,212,255,0.2);border-bottom:1px solid rgba(0,212,255,0.2);padding:1rem 1.5rem;color:#e2e8f0;min-width:90px;text-align:center;">
+        <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem">índice 1</div>
+        "platano"
+      </div>
+      <div style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.2);border-left:none;border-radius:0 8px 8px 0;padding:1rem 1.5rem;color:#e2e8f0;min-width:90px;text-align:center;">
+        <div style="font-size:0.7rem;color:var(--muted);margin-bottom:0.5rem">índice 2</div>
+        "cereza"
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('lst', 'crear')">Crear y acceder</button>
+      <button class="tab-btn" onclick="switchTab('lst', 'modificar')">Modificar</button>
+      <button class="tab-btn" onclick="switchTab('lst', 'recorrer')">Recorrer</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="lst-crear">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Crear y acceder a listas</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Crear una lista — con corchetes []</span>
+<span class="var">frutas</span> <span class="op">=</span> [<span class="str">"manzana"</span>, <span class="str">"platano"</span>, <span class="str">"cereza"</span>]
+
+<span class="cmt"># Acceder por índice</span>
+<span class="fn">print</span>(<span class="var">frutas</span>[<span class="num">0</span>])   <span class="cmt"># manzana</span>
+<span class="fn">print</span>(<span class="var">frutas</span>[<span class="num">1</span>])   <span class="cmt"># platano</span>
+<span class="fn">print</span>(<span class="var">frutas</span>[<span class="num">2</span>])   <span class="cmt"># cereza</span>
+
+<span class="cmt"># Longitud de la lista</span>
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="var">frutas</span>))  <span class="cmt"># 3</span>
+
+<span class="cmt"># Las listas pueden mezclar tipos de datos</span>
+<span class="var">mixta</span> <span class="op">=</span> [<span class="num">42</span>, <span class="str">"hola"</span>, <span class="num">3.14</span>, <span class="kw">True</span>]
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="lst-modificar">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Modificar listas</span>
+          </div>
+          <div class="code-content">
+<span class="var">frutas</span> <span class="op">=</span> [<span class="str">"manzana"</span>, <span class="str">"platano"</span>, <span class="str">"cereza"</span>]
+
+<span class="cmt"># Cambiar un elemento</span>
+<span class="var">frutas</span>[<span class="num">1</span>] <span class="op">=</span> <span class="str">"kiwi"</span>
+<span class="fn">print</span>(<span class="var">frutas</span>)        <span class="cmt"># ['manzana', 'kiwi', 'cereza']</span>
+
+<span class="cmt"># Agregar al final</span>
+<span class="var">frutas</span>.<span class="fn">append</span>(<span class="str">"naranja"</span>)
+<span class="fn">print</span>(<span class="var">frutas</span>)        <span class="cmt"># ['manzana', 'kiwi', 'cereza', 'naranja']</span>
+
+<span class="cmt"># Insertar en una posición específica</span>
+<span class="var">frutas</span>.<span class="fn">insert</span>(<span class="num">1</span>, <span class="str">"pera"</span>)
+<span class="fn">print</span>(<span class="var">frutas</span>)        <span class="cmt"># ['manzana', 'pera', 'kiwi', 'cereza', 'naranja']</span>
+
+<span class="cmt"># Eliminar por valor</span>
+<span class="var">frutas</span>.<span class="fn">remove</span>(<span class="str">"kiwi"</span>)
+<span class="fn">print</span>(<span class="var">frutas</span>)        <span class="cmt"># ['manzana', 'pera', 'cereza', 'naranja']</span>
+
+<span class="cmt"># Longitud de la lista</span>
+<span class="fn">print</span>(<span class="fn">len</span>(<span class="var">frutas</span>))  <span class="cmt"># 4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="lst-recorrer">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Recorrer listas — dos formas</span>
+          </div>
+          <div class="code-content">
+<span class="var">frutas</span> <span class="op">=</span> [<span class="str">"manzana"</span>, <span class="str">"pera"</span>, <span class="str">"cereza"</span>]
+
+<span class="cmt"># Forma 1: directamente (más pythónica)</span>
+<span class="kw">for</span> <span class="var">fruta</span> <span class="kw">in</span> <span class="var">frutas</span><span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">fruta</span>)
+<span class="cmt"># manzana, pera, cereza</span>
+
+<span class="cmt"># Forma 2: con índice (cuando necesitamos la posición)</span>
+<span class="kw">for</span> <span class="var">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">0</span>, <span class="fn">len</span>(<span class="var">frutas</span>))<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">frutas</span>[<span class="var">i</span>])
+<span class="cmt"># manzana, pera, cereza</span>
+
+<span class="cmt"># ¿Cuándo usar cada una? Usa la Forma 1 cuando solo
+# necesitas el valor; la Forma 2 cuando necesitas el índice.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.11.2 DICCIONARIOS -->
+  <section class="section" id="section-diccionarios">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.11.2</div>
+      <h1 class="section-title">Diccionarios</h1>
+      <p class="section-subtitle">Los diccionarios son colecciones de pares <span class="highlight">clave → valor</span>. En lugar de índices numéricos, usamos claves que definimos nosotros.</p>
+    </div>
+
+    <div style="display:flex;align-items:stretch;gap:0;margin:1.5rem 0;font-family:'Space Mono',monospace;font-size:0.8rem;overflow-x:auto;">
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(0,212,255,0.3);border-radius:8px 0 0 8px;overflow:hidden;">
+        <div style="background:rgba(0,212,255,0.15);padding:0.5rem 1rem;color:var(--accent);font-size:0.7rem;letter-spacing:0.08em;text-align:center">CLAVE</div>
+        <div style="background:rgba(0,212,255,0.05);padding:0.6rem 1rem;color:#94a3b8;border-top:1px solid rgba(0,212,255,0.1)">"nombre"</div>
+        <div style="background:rgba(0,212,255,0.02);padding:0.6rem 1rem;color:#94a3b8;border-top:1px solid rgba(0,212,255,0.1)">"edad"</div>
+        <div style="background:rgba(0,212,255,0.05);padding:0.6rem 1rem;color:#94a3b8;border-top:1px solid rgba(0,212,255,0.1)">"ciudad"</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:0;border:1px solid rgba(16,185,129,0.3);border-left:none;border-radius:0 8px 8px 0;overflow:hidden;">
+        <div style="background:rgba(16,185,129,0.15);padding:0.5rem 1rem;color:var(--accent3);font-size:0.7rem;letter-spacing:0.08em;text-align:center">VALOR</div>
+        <div style="background:rgba(16,185,129,0.05);padding:0.6rem 1rem;color:#e2e8f0;border-top:1px solid rgba(16,185,129,0.1)">"Juan"</div>
+        <div style="background:rgba(16,185,129,0.02);padding:0.6rem 1rem;color:#e2e8f0;border-top:1px solid rgba(16,185,129,0.1)">30</div>
+        <div style="background:rgba(16,185,129,0.05);padding:0.6rem 1rem;color:#e2e8f0;border-top:1px solid rgba(16,185,129,0.1)">"Madrid"</div>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('dic', 'crear')">Crear y acceder</button>
+      <button class="tab-btn" onclick="switchTab('dic', 'modificar')">Modificar</button>
+      <button class="tab-btn" onclick="switchTab('dic', 'recorrer')">Recorrer</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="dic-crear">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Crear diccionarios — con llaves { }</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Crear un diccionario</span>
+<span class="var">persona</span> <span class="op">=</span> {
+    <span class="str">"nombre"</span><span class="op">:</span> <span class="str">"Juan"</span>,
+    <span class="str">"edad"</span><span class="op">:</span> <span class="num">30</span>,
+    <span class="str">"ciudad"</span><span class="op">:</span> <span class="str">"Madrid"</span>
+}
+
+<span class="cmt"># Acceder por clave</span>
+<span class="fn">print</span>(<span class="var">persona</span>[<span class="str">"nombre"</span>])  <span class="cmt"># Juan</span>
+<span class="fn">print</span>(<span class="var">persona</span>[<span class="str">"edad"</span>])    <span class="cmt"># 30</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="dic-modificar">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Modificar diccionarios</span>
+          </div>
+          <div class="code-content">
+<span class="var">persona</span> <span class="op">=</span> {<span class="str">"nombre"</span><span class="op">:</span> <span class="str">"Juan"</span>, <span class="str">"edad"</span><span class="op">:</span> <span class="num">30</span>, <span class="str">"ciudad"</span><span class="op">:</span> <span class="str">"Madrid"</span>}
+
+<span class="cmt"># Modificar un valor</span>
+<span class="var">persona</span>[<span class="str">"edad"</span>] <span class="op">=</span> <span class="num">31</span>
+<span class="fn">print</span>(<span class="var">persona</span>)    <span class="cmt"># {'nombre': 'Juan', 'edad': 31, 'ciudad': 'Madrid'}</span>
+
+<span class="cmt"># Agregar un nuevo par clave-valor</span>
+<span class="var">persona</span>[<span class="str">"profesion"</span>] <span class="op">=</span> <span class="str">"Ingeniero"</span>
+<span class="fn">print</span>(<span class="var">persona</span>)
+<span class="cmt"># {'nombre': 'Juan', 'edad': 31, 'ciudad': 'Madrid', 'profesion': 'Ingeniero'}</span>
+
+<span class="cmt"># Eliminar un par clave-valor</span>
+<span class="kw">del</span> <span class="var">persona</span>[<span class="str">"ciudad"</span>]
+<span class="fn">print</span>(<span class="var">persona</span>)    <span class="cmt"># {'nombre': 'Juan', 'edad': 31, 'profesion': 'Ingeniero'}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="dic-recorrer">
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Recorrer diccionarios</span>
+          </div>
+          <div class="code-content">
+<span class="var">persona</span> <span class="op">=</span> {<span class="str">"nombre"</span><span class="op">:</span> <span class="str">"Juan"</span>, <span class="str">"edad"</span><span class="op">:</span> <span class="num">30</span>, <span class="str">"ciudad"</span><span class="op">:</span> <span class="str">"Madrid"</span>}
+
+<span class="cmt"># Recorrer clave y valor con items()</span>
+<span class="kw">for</span> <span class="var">clave</span>, <span class="var">valor</span> <span class="kw">in</span> <span class="var">persona</span>.<span class="fn">items</span>()<span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">f"{<span class="var">clave</span>}: {<span class="var">valor</span>}"</span>)
+<span class="cmt"># nombre: Juan</span>
+<span class="cmt"># edad: 30</span>
+<span class="cmt"># ciudad: Madrid</span>
+
+<span class="cmt"># Solo claves con keys()</span>
+<span class="kw">for</span> <span class="var">clave</span> <span class="kw">in</span> <span class="var">persona</span>.<span class="fn">keys</span>()<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">clave</span>)       <span class="cmt"># nombre, edad, ciudad</span>
+
+<span class="cmt"># Solo valores con values()</span>
+<span class="kw">for</span> <span class="var">valor</span> <span class="kw">in</span> <span class="var">persona</span>.<span class="fn">values</span>()<span class="op">:</span>
+    <span class="fn">print</span>(<span class="var">valor</span>)       <span class="cmt"># Juan, 30, Madrid</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1.12 FUNCIONES Y MÓDULOS -->
+  <section class="section" id="section-funciones">
+    <div class="section-header">
+      <div class="section-tag">Sección 1.12</div>
+      <h1 class="section-title">Funciones y módulos</h1>
+      <p class="section-subtitle">Las funciones son bloques de código reutilizables que realizan una tarea específica. Los módulos agrupan funciones en archivos separados.</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('fn', 'def')">Definir funciones</button>
+      <button class="tab-btn" onclick="switchTab('fn', 'scope')">Alcance (scope)</button>
+      <button class="tab-btn" onclick="switchTab('fn', 'mod')">Módulos</button>
+      <button class="tab-btn" onclick="switchTab('fn', 'ejemplos')">Ejemplos prácticos</button>
+    </div>
+
+    <div class="tab-panels">
+      <div class="tab-panel active" id="fn-def">
+        <p>Se definen con la palabra clave <span class="highlight">def</span>, seguida del nombre y paréntesis. Pueden recibir <strong>parámetros</strong> y devolver valores con <strong>return</strong>.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Estructura y ejemplos de funciones</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Esquema general</span>
+<span class="kw">def</span> <span class="fn">nombre_de_la_funcion</span>(<span class="var">parametro1</span>, <span class="var">parametro2</span>)<span class="op">:</span>
+    <span class="cmt"># bloque de código</span>
+    <span class="kw">return</span> <span class="var">valor_de_retorno</span>
+
+<span class="cmt"># Función sin return — solo ejecuta acciones</span>
+<span class="kw">def</span> <span class="fn">saludar</span>(<span class="var">nombre</span>)<span class="op">:</span>
+    <span class="fn">print</span>(<span class="str">f"Hola, {<span class="var">nombre</span>}"</span>)
+
+<span class="fn">saludar</span>(<span class="str">"Ana"</span>)    <span class="cmt"># Hola, Ana</span>
+<span class="fn">saludar</span>(<span class="str">"Luis"</span>)   <span class="cmt"># Hola, Luis</span>
+
+<span class="cmt"># Función con return — calcula y devuelve un valor</span>
+<span class="kw">def</span> <span class="fn">sumar</span>(<span class="var">a</span>, <span class="var">b</span>)<span class="op">:</span>
+    <span class="kw">return</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span>
+
+<span class="var">resultado</span> <span class="op">=</span> <span class="fn">sumar</span>(<span class="num">5</span>, <span class="num">3</span>)
+<span class="fn">print</span>(<span class="var">resultado</span>)      <span class="cmt"># 8</span>
+          </div>
+        </div>
+
+        <h3>Flujo de ejecución</h3>
+        <ul class="styled-list">
+          <li>El ordenador <strong>lee</strong> la definición de la función pero <strong>no la ejecuta</strong> hasta que sea llamada.</li>
+          <li>Al llamar a <code style="color:var(--accent3)">sumar(5, 3)</code>, Python busca la definición y sustituye: a=5, b=3.</li>
+          <li>Se ejecuta el cuerpo de la función: <code style="color:var(--accent3)">return 5+3</code>.</li>
+          <li>La función devuelve <strong>8</strong> al punto donde fue llamada y el programa continúa.</li>
+        </ul>
+      </div>
+
+      <div class="tab-panel" id="fn-scope">
+        <p>El <span class="highlight">alcance (scope)</span> de una variable determina dónde puede usarse dentro del código.</p>
+
+        <div class="scope-diagram">
+          <div style="margin-bottom:0.5rem;color:#94a3b8;font-size:0.82rem;font-family:'Space Mono',monospace;">
+            <span style="color:var(--accent2)">PI = 3.14159</span> &nbsp;&nbsp;&nbsp;<span class="cmt"># variable GLOBAL — visible en todo el programa</span>
+          </div>
+          <div class="scope-inner">
+            <div style="color:#94a3b8;font-size:0.82rem;font-family:'Space Mono',monospace;">
+              <span style="color:var(--accent)">def mostrar_mensaje():</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--accent3)">mensaje = "Hola desde la función"</span> &nbsp;<span class="cmt"># LOCAL</span><br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#e2e8f0">print(mensaje)</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt"># ✅ OK</span>
+            </div>
+          </div>
+          <div style="margin-top:0.75rem;color:#94a3b8;font-size:0.82rem;font-family:'Space Mono',monospace;">
+            <span style="color:#e2e8f0">mostrar_mensaje()</span><br>
+            <span style="color:#e2e8f0">print(mensaje)</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#ef4444"># ❌ ERROR — 'mensaje' es local</span>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          <div class="card green">
+            <div class="card-icon">🌍</div>
+            <div class="card-title">Variable Global</div>
+            <div class="card-type">Definida fuera de funciones</div>
+            <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Accesible desde cualquier parte del programa.</p>
+          </div>
+          <div class="card blue">
+            <div class="card-icon">📦</div>
+            <div class="card-title">Variable Local</div>
+            <div class="card-type">Definida dentro de una función</div>
+            <p class="card-desc" style="font-size:0.78rem;margin-top:0.5rem">Solo existe dentro de esa función. Fuera es invisible.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="fn-mod">
+        <p>Cuando el código crece, podemos organizar las funciones en <span class="highlight">módulos</span>: archivos .py separados que podemos importar.</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">matematicas.py — nuestro módulo propio</span>
+          </div>
+          <div class="code-content">
+<span class="kw">def</span> <span class="fn">sumar</span>(<span class="var">a</span>, <span class="var">b</span>)<span class="op">:</span>
+    <span class="kw">return</span> <span class="var">a</span> <span class="op">+</span> <span class="var">b</span>
+
+<span class="kw">def</span> <span class="fn">restar</span>(<span class="var">a</span>, <span class="var">b</span>)<span class="op">:</span>
+    <span class="kw">return</span> <span class="var">a</span> <span class="op">-</span> <span class="var">b</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">programa_principal.py — importar y usar el módulo</span>
+          </div>
+          <div class="code-content">
+<span class="kw">import</span> <span class="var">matematicas</span>
+
+<span class="var">resultado_suma</span> <span class="op">=</span> <span class="var">matematicas</span>.<span class="fn">sumar</span>(<span class="num">10</span>, <span class="num">5</span>)
+<span class="var">resultado_resta</span> <span class="op">=</span> <span class="var">matematicas</span>.<span class="fn">restar</span>(<span class="num">10</span>, <span class="num">5</span>)
+
+<span class="fn">print</span>(<span class="str">f"Suma: {<span class="var">resultado_suma</span>}"</span>)    <span class="cmt"># Suma: 15</span>
+<span class="fn">print</span>(<span class="str">f"Resta: {<span class="var">resultado_resta</span>}"</span>)  <span class="cmt"># Resta: 5</span>
+          </div>
+        </div>
+
+        <div class="info-box success">
+          <div class="info-box-title">🚀 Python tiene miles de módulos</div>
+          <p>Además de los módulos que creamos nosotros, Python dispone de un enorme catálogo de módulos de terceros. Se instalan con <code style="color:var(--accent3)">pip install nombre_modulo</code>.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="fn-ejemplos">
+        <p>Dos ejemplos de lo que se puede hacer importando módulos de Python:</p>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Crear un PDF con fpdf</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Instalar: pip install fpdf</span>
+<span class="kw">from</span> <span class="var">fpdf</span> <span class="kw">import</span> <span class="var">FPDF</span>
+
+<span class="var">pdf</span> <span class="op">=</span> <span class="fn">FPDF</span>(<span class="var">orientation</span><span class="op">=</span><span class="str">'P'</span>, <span class="var">unit</span><span class="op">=</span><span class="str">'mm'</span>, <span class="var">format</span><span class="op">=</span><span class="str">'A4'</span>)
+<span class="var">pdf</span>.<span class="fn">add_page</span>()
+<span class="var">pdf</span>.<span class="fn">set_font</span>(<span class="str">'Arial'</span>, <span class="str">''</span>, <span class="num">16</span>)
+<span class="var">pdf</span>.<span class="fn">text</span>(<span class="var">x</span><span class="op">=</span><span class="num">60</span>, <span class="var">y</span><span class="op">=</span><span class="num">50</span>, <span class="var">txt</span><span class="op">=</span><span class="str">'Mi primer PDF'</span>)
+<span class="var">pdf</span>.<span class="fn">output</span>(<span class="str">'unpdf.pdf'</span>, <span class="str">'F'</span>)
+<span class="cmt"># ¡Genera un archivo PDF real con 6 líneas de código!</span>
+          </div>
+        </div>
+
+        <div class="code-block">
+          <div class="code-header">
+            <div class="code-dots"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span></div>
+            <span class="code-label">Gráfica de temperaturas con matplotlib</span>
+          </div>
+          <div class="code-content">
+<span class="cmt"># Instalar: pip install matplotlib</span>
+<span class="kw">import</span> <span class="var">matplotlib</span>.<span class="var">pyplot</span> <span class="kw">as</span> <span class="var">plt</span>
+
+<span class="var">fig</span>, <span class="var">ax</span> <span class="op">=</span> <span class="var">plt</span>.<span class="fn">subplots</span>()
+<span class="var">dias</span> <span class="op">=</span> [<span class="str">'L'</span>, <span class="str">'M'</span>, <span class="str">'X'</span>, <span class="str">'J'</span>, <span class="str">'V'</span>, <span class="str">'S'</span>, <span class="str">'D'</span>]
+<span class="var">temperaturas</span> <span class="op">=</span> {
+    <span class="str">'Madrid'</span><span class="op">:</span> [<span class="num">28.5</span>, <span class="num">30.5</span>, <span class="num">31</span>, <span class="num">30</span>, <span class="num">28</span>, <span class="num">27.5</span>, <span class="num">30.5</span>],
+    <span class="str">'Barcelona'</span><span class="op">:</span> [<span class="num">24.5</span>, <span class="num">25.5</span>, <span class="num">26.5</span>, <span class="num">25</span>, <span class="num">26.5</span>, <span class="num">24.5</span>, <span class="num">25</span>]
+}
+<span class="var">ax</span>.<span class="fn">plot</span>(<span class="var">dias</span>, <span class="var">temperaturas</span>[<span class="str">'Madrid'</span>], <span class="var">color</span><span class="op">=</span><span class="str">'tab:purple'</span>)
+<span class="var">ax</span>.<span class="fn">plot</span>(<span class="var">dias</span>, <span class="var">temperaturas</span>[<span class="str">'Barcelona'</span>], <span class="var">color</span><span class="op">=</span><span class="str">'tab:green'</span>)
+<span class="var">plt</span>.<span class="fn">show</span>()
+<span class="cmt"># Muestra una gráfica comparativa de temperaturas</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // Navigation
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    
+    document.querySelectorAll('.nav-item').forEach(n => {
+      if (n.getAttribute('onclick') && n.getAttribute('onclick').includes("'" + id + "'")) {
+        n.classList.add('active');
+      }
+    });
+
+    // Update progress
+    const items = document.querySelectorAll('.nav-item');
+    const sections = ['hero','tipos','variables','operadores','comentarios','io','condicionales','bucles','salto','listas','diccionarios','funciones'];
+    const idx = sections.indexOf(id);
+    const pct = ((idx + 1) / sections.length) * 100;
+    document.getElementById('progressBar').style.width = pct + '%';
+
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+    window.scrollTo(0,0);
+  }
+
+  // Tabs
+  function switchTab(group, tab) {
+    // Find all tab buttons and panels for this group
+    const allBtns = document.querySelectorAll(`[onclick^="switchTab('${group}"]`);
+    const allPanels = document.querySelectorAll(`[id^="${group}-"]`);
+    
+    allBtns.forEach(b => b.classList.remove('active'));
+    allPanels.forEach(p => p.classList.remove('active'));
+    
+    event.target.classList.add('active');
+    const panel = document.getElementById(`${group}-${tab}`);
+    if (panel) panel.classList.add('active');
+  }
+
+  // Quiz
+  function checkQuiz(btn, correct, qid) {
+    const opts = btn.parentElement.querySelectorAll('.quiz-opt');
+    opts.forEach(o => { o.classList.remove('correct','wrong'); o.disabled = true; });
+    
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    
+    const fb = document.getElementById(qid + '-fb');
+    fb.className = 'quiz-feedback show ' + (correct ? 'ok' : 'fail');
+    fb.textContent = correct 
+      ? '✅ ¡Correcto! ' + (qid === 'q1' ? 'Primero se evalúa "False and False" = False, luego "False or True" = True.' : 'continue salta el print cuando i==3, por lo que no se muestra el 3.')
+      : '❌ Inténtalo de nuevo. Recuerda el orden de precedencia: not > and > or.';
+  }
+
+  // Mobile
+  function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
