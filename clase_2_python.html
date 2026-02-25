@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Dev Slide - Pokémon Edition</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/dracula.min.css">
+    <style>
+        .reveal h1, .reveal h2 { color: #50fa7b; font-family: 'Courier New', Courier, monospace; }
+        .code-box { background: #282a36; border-radius: 10px; padding: 20px; border: 1px solid #6272a4; }
+        .highlight { color: #ff79c6; font-weight: bold; }
+        .type-int { color: #8be9fd; }
+        .type-float { color: #bd93f9; }
+        .type-str { color: #f1fa8c; }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>Python <span style="color: #ffb86c;">Interactive</span></h1>
+                <p>De scripts estáticos a programas con vida</p>
+                <div style="font-size: 0.6em; margin-top: 50px; color: #6272a4;">
+                    Input | Casting | Operadores
+                </div>
+            </section>
+
+            <section>
+                <section>
+                    <h2>1. Entrada y Casting</h2>
+                    <p>Por defecto, <code>input()</code> siempre nos da un <span class="type-str">String</span>.</p>
+                    <div class="code-box">
+                        <pre><code class="python">
+# ¡Cuidado! Esto falla si quieres sumar
+nivel = input("Nivel: ") 
+print(nivel + 1) # Error: No puedes sumar texto + número
+                        </code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h2>La solución: El Casting</h2>
+                    <p>Convertimos el tipo de dato para que Python sepa qué hacer.</p>
+                    <ul>
+                        <li><span class="type-int">int()</span>: Para números enteros (Nivel, Vida).</li>
+                        <li><span class="type-float">float()</span>: Para decimales (Peso, Altura).</li>
+                    </ul>
+                    <div class="code-box">
+                        <pre><code class="python">
+nivel = int(input("Nivel: ")) # Ahora sí es un número
+                        </code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section>
+                <h2>2. Operadores Aritméticos</h2>
+                <p>Calculando estadísticas de combate</p>
+                <table style="font-size: 0.8em;">
+                    <thead>
+                        <tr>
+                            <th>Op</th>
+                            <th>Acción</th>
+                            <th>Ejemplo Pokémon</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>+ / -</td><td>Suma/Resta</td><td>vida - daño_recibido</td></tr>
+                        <tr><td>*</td><td>Multiplicar</td><td>daño * 1.5 (Eficacia)</td></tr>
+                        <tr><td>/</td><td>Dividir</td><td>xp / enemigos</td></tr>
+                        <tr><td>//</td><td>Div. Entera</td><td>puntos // 2 (Sin decimales)</td></tr>
+                        <tr><td>%</td><td>Módulo</td><td>nivel % 2 (¿Es par?)</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section>
+                <section>
+                    <h2>3. Operadores Relacionales</h2>
+                    <p>¿Qué Pokémon es más fuerte?</p>
+                    <div class="code-box" style="font-size: 0.7em;">
+                        <pre><code class="python">
+# Devuelven True o False
+nivel_pika > nivel_eevee  # Mayor que
+nivel_pika == nivel_eevee # ¿Son iguales?
+tipo != "Agua"            # ¿Es distinto de Agua?
+                        </code></pre>
+                    </div>
+                </section>
+                <section>
+                    <h2>Operadores Lógicos</h2>
+                    <p>Combinando condiciones complejas</p>
+                    <ul style="font-size: 0.8em;">
+                        <li><span class="highlight">and:</span> ¿Se cumplen AMBAS?</li>
+                        <li><span class="highlight">or:</span> ¿Se cumple AL MENOS UNA?</li>
+                        <li><span class="highlight">not:</span> Invierte el resultado.</li>
+                    </ul>
+                    <div class="code-box" style="font-size: 0.6em; margin-top: 20px;">
+                        <pre><code class="python">
+# ¿Puede entrar en la Liga Especial?
+if nivel > 10 and nivel < 50:
+    print("¡Acceso permitido!")
+                        </code></pre>
+                    </div>
+                </section>
+            </section>
+
+            <section style="text-align: left;">
+                <h2 style="color: #ffb86c;">🚀 El Reto:</h2>
+                <p>Crea un programa que:</p>
+                <ol style="font-size: 0.7em;">
+                    <li>Pida el nombre y nivel de un Pokémon por teclado.</li>
+                    <li>Calcule su <strong>"Poder de Ataque"</strong> (Nivel multiplicado por 1.5).</li>
+                    <li>Muestre si el Pokémon es de <strong>"Nivel Alto"</strong> (True si nivel > 30).</li>
+                </ol>
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        Reveal.initialize({
+            hash: true,
+            center: true,
+            transition: 'slide' 
+        });
+    </script>
+</body>
+</html>
