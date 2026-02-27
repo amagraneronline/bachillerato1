@@ -3,129 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Python Dev Slide - Pokémon Edition</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/dracula.min.css">
+    <title>MasterClass Python: Academia Pokémon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        .reveal h1, .reveal h2 { color: #50fa7b; font-family: 'Courier New', Courier, monospace; }
-        .code-box { background: #282a36; border-radius: 10px; padding: 20px; border: 1px solid #6272a4; }
-        .highlight { color: #ff79c6; font-weight: bold; }
-        .type-int { color: #8be9fd; }
-        .type-float { color: #bd93f9; }
-        .type-str { color: #f1fa8c; }
+        :root {
+            --primary: #ef5350;
+            --secondary: #3761a8;
+            --accent: #feca1b;
+            --bg: #f4f4f9;
+            --dark: #333;
+        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); color: var(--dark); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        header { background: var(--primary); color: white; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .slide { background: white; padding: 2rem; border-radius: 15px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 8px solid var(--secondary); display: none; }
+        .slide.active { display: block; animation: fadeIn 0.5s; }
+        h2 { color: var(--secondary); display: flex; align-items: center; gap: 10px; }
+        pre { background: #282c34; color: #abb2bf; padding: 1.5rem; border-radius: 10px; overflow-x: auto; font-size: 1.1rem; }
+        .keyword { color: #c678dd; } .func { color: #61afef; } .str { color: #98c379; } .comment { color: #5c6370; italic; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 1rem; }
+        .card { background: #eef2f7; padding: 1rem; border-radius: 10px; border: 1px solid #d1d9e6; }
+        .btn-nav { background: var(--secondary); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        .btn-nav:hover { background: #2a4a84; }
+        .controls { text-align: center; margin-top: 1rem; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="reveal">
-        <div class="slides">
 
-            <section>
-                <h1>Python <span style="color: #ffb86c;">Interactive</span></h1>
-                <p>De scripts estáticos a programas con vida</p>
-                <div style="font-size: 0.6em; margin-top: 50px; color: #6272a4;">
-                    Input | Casting | Operadores
-                </div>
-            </section>
+<div class="container">
+    <header>
+        <h1><i class="fas fa-terminal"></i> Python: Nivel Intermedio</h1>
+        <p>Entrada de datos, Operadores y Lógica de Combate</p>
+    </header>
 
-            <section>
-                <section>
-                    <h2>1. Entrada y Casting</h2>
-                    <p>Por defecto, <code>input()</code> siempre nos da un <span class="type-str">String</span>.</p>
-                    <div class="code-box">
-                        <pre><code class="python">
-# ¡Cuidado! Esto falla si quieres sumar
-nivel = input("Nivel: ") 
-print(nivel + 1) # Error: No puedes sumar texto + número
-                        </code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h2>La solución: El Casting</h2>
-                    <p>Convertimos el tipo de dato para que Python sepa qué hacer.</p>
-                    <ul>
-                        <li><span class="type-int">int()</span>: Para números enteros (Nivel, Vida).</li>
-                        <li><span class="type-float">float()</span>: Para decimales (Peso, Altura).</li>
-                    </ul>
-                    <div class="code-box">
-                        <pre><code class="python">
-nivel = int(input("Nivel: ")) # Ahora sí es un número
-                        </code></pre>
-                    </div>
-                </section>
-            </section>
+    <div class="slide active" id="slide1">
+        <h2><i class="fas fa-keyboard"></i> 1. Entrada y Conversión (Casting)</h2>
+        <p>Todo lo que entra por <code>input()</code> es texto. Si quieres hacer cálculos, debes transformarlo.</p>
+        <pre>
+<span class="comment"># Captura de datos</span>
+nombre = <span class="func">input</span>(<span class="str">"Nombre del Pokémon: "</span>)
+nivel = <span class="func">int</span>(<span class="func">input</span>(<span class="str">"Nivel (entero): "</span>))
+peso = <span class="func">float</span>(<span class="func">input</span>(<span class="str">"Peso (decimal): "</span>))
 
-            <section>
-                <h2>2. Operadores Aritméticos</h2>
-                <p>Calculando estadísticas de combate</p>
-                <table style="font-size: 0.8em;">
-                    <thead>
-                        <tr>
-                            <th>Op</th>
-                            <th>Acción</th>
-                            <th>Ejemplo Pokémon</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>+ / -</td><td>Suma/Resta</td><td>vida - daño_recibido</td></tr>
-                        <tr><td>*</td><td>Multiplicar</td><td>daño * 1.5 (Eficacia)</td></tr>
-                        <tr><td>/</td><td>Dividir</td><td>xp / enemigos</td></tr>
-                        <tr><td>//</td><td>Div. Entera</td><td>puntos // 2 (Sin decimales)</td></tr>
-                        <tr><td>%</td><td>Módulo</td><td>nivel % 2 (¿Es par?)</td></tr>
-                    </tbody>
-                </table>
-            </section>
-
-            <section>
-                <section>
-                    <h2>3. Operadores Relacionales</h2>
-                    <p>¿Qué Pokémon es más fuerte?</p>
-                    <div class="code-box" style="font-size: 0.7em;">
-                        <pre><code class="python">
-# Devuelven True o False
-nivel_pika > nivel_eevee  # Mayor que
-nivel_pika == nivel_eevee # ¿Son iguales?
-tipo != "Agua"            # ¿Es distinto de Agua?
-                        </code></pre>
-                    </div>
-                </section>
-                <section>
-                    <h2>Operadores Lógicos</h2>
-                    <p>Combinando condiciones complejas</p>
-                    <ul style="font-size: 0.8em;">
-                        <li><span class="highlight">and:</span> ¿Se cumplen AMBAS?</li>
-                        <li><span class="highlight">or:</span> ¿Se cumple AL MENOS UNA?</li>
-                        <li><span class="highlight">not:</span> Invierte el resultado.</li>
-                    </ul>
-                    <div class="code-box" style="font-size: 0.6em; margin-top: 20px;">
-                        <pre><code class="python">
-# ¿Puede entrar en la Liga Especial?
-if nivel > 10 and nivel < 50:
-    print("¡Acceso permitido!")
-                        </code></pre>
-                    </div>
-                </section>
-            </section>
-
-            <section style="text-align: left;">
-                <h2 style="color: #ffb86c;">🚀 El Reto:</h2>
-                <p>Crea un programa que:</p>
-                <ol style="font-size: 0.7em;">
-                    <li>Pida el nombre y nivel de un Pokémon por teclado.</li>
-                    <li>Calcule su <strong>"Poder de Ataque"</strong> (Nivel multiplicado por 1.5).</li>
-                    <li>Muestre si el Pokémon es de <strong>"Nivel Alto"</strong> (True si nivel > 30).</li>
-                </ol>
-            </section>
-
+<span class="func">print</span>(f<span class="str">"{nombre} pesa {peso}kg."</span>)</pre>
+        <div class="card">
+            <strong>💡 Reto:</strong> ¿Qué pasa si intentas sumar 1 al <code>input()</code> sin usar <code>int()</code>? <br>
+            <em>Respuesta: Python lanzará un TypeError porque no sabe sumar letras y números.</em>
         </div>
     </div>
 
-    <script>
-        Reveal.initialize({
-            hash: true,
-            center: true,
-            transition: 'slide' 
-        });
-    </script>
+    <div class="slide" id="slide2">
+        <h2><i class="fas fa-calculator"></i> 2. Operadores Aritméticos</h2>
+        <p>Usa Python para calcular estadísticas de batalla en tiempo real.</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Básicos</h3>
+                <ul>
+                    <li><code>+</code> Suma (Vida + poción)</li>
+                    <li><code>-</code> Resta (Vida - daño)</li>
+                    <li><code>*</code> Multiplicación (Crítico)</li>
+                    <li><code>/</code> División (Repartir EXP)</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Avanzados</h3>
+                <ul>
+                    <li><code>**</code> Potencia</li>
+                    <li><code>//</code> División Entera</li>
+                    <li><code>%</code> Módulo (Resto de la división)</li>
+                </ul>
+            </div>
+        </div>
+        <pre><span class="comment"># Ejemplo: Bonus de experiencia</span>
+exp_final = nivel_actual * <span class="num">1.5</span></pre>
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2><i class="fas fa-balance-scale"></i> 3. Comparaciones y Lógica</h2>
+        <p>¿Tu Pokémon puede evolucionar o entrar en la Liga?</p>
+        <div class="grid">
+            <div class="card">
+                <h3>Relacionales (True/False)</h3>
+                <ul>
+                    <li><code>==</code> Igual a</li>
+                    <li><code>!=</code> Distinto de</li>
+                    <li><code>></code> Mayor que</li>
+                </ul>
+            </div>
+            <div class="card">
+                <h3>Lógicos (Combinar)</h3>
+                <ul>
+                    <li><code>and</code>: Todo debe ser verdad.</li>
+                    <li><code>or</code>: Al menos uno es verdad.</li>
+                    <li><code>not</code>: Invierte el valor.</li>
+                </ul>
+            </div>
+        </div>
+        <pre>
+<span class="comment"># Condición de acceso a la Élite Four</span>
+puede_entrar = nivel > <span class="num">50</span> <span class="keyword">and</span> tiene_medalla == <span class="keyword">True</span></pre>
+    </div>
+
+    <div class="controls">
+        <button class="btn-nav" onclick="changeSlide(-1)">Anterior</button>
+        <span id="page-info">1 / 3</span>
+        <button class="btn-nav" onclick="changeSlide(1)">Siguiente</button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 3;
+
+    function changeSlide(direction) {
+        document.getElementById(`slide${currentSlide}`).classList.remove('active');
+        currentSlide += direction;
+        if (currentSlide > totalSlides) currentSlide = 1;
+        if (currentSlide < 1) currentSlide = totalSlides;
+        document.getElementById(`slide${currentSlide}`).classList.add('active');
+        document.getElementById('page-info').innerText = `${currentSlide} / ${totalSlides}`;
+    }
+</script>
+
 </body>
 </html>
