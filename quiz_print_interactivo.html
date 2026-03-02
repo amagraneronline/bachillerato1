@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz · Formas de imprimir en Python</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #f7f4ef;
+    --surface:  #ffffff;
+    --ink:      #1a1714;
+    --muted:    #8a857d;
+    --border:   #e2ddd6;
+    --c-print:  #c0392b;   /* print normal   — rojo */
+    --c-comas:  #1a5276;   /* comas           — azul */
+    --c-fstr:   #1e8449;   /* f-string        — verde */
+    --c-print-bg:  #fdf0ee;
+    --c-comas-bg:  #eaf2fb;
+    --c-fstr-bg:   #eafaf1;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 2.5rem 1rem 5rem;
+  }
+
+  /* ── HEADER ── */
+  header {
+    max-width: 780px;
+    margin: 0 auto 3rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 1rem;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 1.5rem;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(1.9rem, 5vw, 3rem);
+    line-height: 1.05;
+  }
+  header h1 em { font-style: italic; color: var(--c-print); }
+  header .sub { color: var(--muted); font-size: .9rem; margin-top: .4rem; }
+  .legend {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    align-items: flex-end;
+  }
+  .legend-item {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    padding: .2rem .7rem;
+    border-radius: 20px;
+    letter-spacing: .03em;
+  }
+  .leg-print { background: var(--c-print-bg); color: var(--c-print); border: 1px solid var(--c-print); }
+  .leg-comas { background: var(--c-comas-bg); color: var(--c-comas); border: 1px solid var(--c-comas); }
+  .leg-fstr  { background: var(--c-fstr-bg);  color: var(--c-fstr);  border: 1px solid var(--c-fstr); }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    max-width: 780px;
+    margin: 2.5rem auto .8rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+  }
+  .section-label::before { content:''; width: 24px; height: 2px; background: var(--ink); }
+
+  /* ── QUIZ CONTAINER ── */
+  .quiz { max-width: 780px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem; }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1.25rem 1.5rem .75rem;
+  }
+
+  .badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .65rem;
+    font-weight: 700;
+    padding: .25rem .6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: .15rem;
+  }
+  .badge-print { background: var(--c-print-bg); color: var(--c-print); border: 1px solid rgba(192,57,43,.25); }
+  .badge-comas { background: var(--c-comas-bg); color: var(--c-comas); border: 1px solid rgba(26,82,118,.25); }
+  .badge-fstr  { background: var(--c-fstr-bg);  color: var(--c-fstr);  border: 1px solid rgba(30,132,73,.25); }
+  .badge-mixed { background: #f5eef8; color: #6c3483; border: 1px solid rgba(108,52,131,.25); }
+
+  .q-text {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.5;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85em;
+    background: #f0ece5;
+    padding: .1rem .4rem;
+    border-radius: 3px;
+  }
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    background: #1a1714;
+    color: #f0ece5;
+    padding: 1rem 1.5rem;
+    margin: .25rem 1.5rem .5rem 3.5rem;
+    border-radius: 6px;
+    line-height: 1.7;
+    overflow-x: auto;
+  }
+  pre .kw  { color: #e74c3c; }
+  pre .st  { color: #f39c12; }
+  pre .var { color: #5dade2; }
+  pre .num { color: #a9cce3; }
+  pre .cm  { color: #7f8c8d; font-style: italic; }
+
+  /* ── OPTIONS ── */
+  .options {
+    padding: .25rem 1.5rem 1rem 3.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .45rem;
+  }
+  .opt {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .6rem .9rem;
+    border: 1.5px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: .93rem;
+    transition: all .15s;
+    user-select: none;
+  }
+  .opt:hover { border-color: #bbb; background: #faf8f5; }
+  .opt.correct { border-color: var(--c-fstr); background: var(--c-fstr-bg); color: var(--c-fstr); font-weight: 500; }
+  .opt.wrong   { border-color: var(--c-print); background: var(--c-print-bg); color: var(--c-print); }
+  .opt.show-correct { border-color: var(--c-fstr); background: var(--c-fstr-bg); }
+  .opt-key {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .7rem;
+    width: 22px; height: 22px;
+    border-radius: 4px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background .15s, color .15s;
+  }
+  .opt.correct .opt-key   { background: var(--c-fstr); color: #fff; }
+  .opt.wrong .opt-key     { background: var(--c-print); color: #fff; }
+  .opt.show-correct .opt-key { background: var(--c-fstr); color: #fff; }
+
+  /* ── FEEDBACK ── */
+  .feedback {
+    display: none;
+    margin: 0 1.5rem .9rem 3.5rem;
+    padding: .65rem 1rem;
+    border-radius: 5px;
+    font-size: .875rem;
+    line-height: 1.55;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { background: var(--c-fstr-bg); border: 1px solid rgba(30,132,73,.3); color: #155c35; }
+  .feedback.ko { background: var(--c-print-bg); border: 1px solid rgba(192,57,43,.3); color: #7b241c; }
+
+  /* ── SHORT ANSWER ── */
+  .short-body {
+    padding: .25rem 1.5rem 1.1rem 3.5rem;
+  }
+  .short-body textarea {
+    width: 100%;
+    background: #faf8f5;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .85rem;
+    padding: .75rem 1rem;
+    border-radius: 5px;
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.65;
+    transition: border-color .2s;
+  }
+  .short-body textarea:focus { outline: none; border-color: var(--c-comas); }
+  .reveal-btn {
+    margin-top: .6rem;
+    background: transparent;
+    border: 1.5px solid var(--ink);
+    color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .72rem;
+    padding: .4rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    letter-spacing: .05em;
+    transition: all .15s;
+  }
+  .reveal-btn:hover { background: var(--ink); color: var(--bg); }
+  .model-answer {
+    display: none;
+    margin-top: .75rem;
+    padding: .8rem 1rem;
+    background: #faf8f5;
+    border: 1.5px solid var(--border);
+    border-left: 4px solid var(--c-comas);
+    border-radius: 5px;
+    font-size: .875rem;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .model-answer.show { display: block; }
+  .model-answer strong { color: var(--c-comas); }
+  .model-answer code { background: #ebe8e2; }
+
+  /* ── SCORE ── */
+  #scorebox {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 8px;
+    padding: .7rem 1.2rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem;
+    z-index: 100;
+    transition: transform .2s;
+  }
+  #scorebox .big { font-size: 1.3rem; font-family: 'DM Serif Display', serif; color: #f0e68c; }
+
+  /* ── STUDENT NAME BANNER ── */
+  #student-banner {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  #student-banner label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .75rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  #student-name {
+    flex: 1;
+    min-width: 200px;
+    background: #faf8f5;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    padding: .5rem .9rem;
+    border-radius: 5px;
+    transition: border-color .2s;
+  }
+  #student-name:focus { outline: none; border-color: var(--c-comas); }
+  #student-name::placeholder { color: #bbb; font-style: italic; }
+
+  /* ── EXPORT PANEL ── */
+  #export-panel {
+    max-width: 780px;
+    margin: 3rem auto 2rem;
+    background: var(--ink);
+    color: var(--bg);
+    border-radius: 10px;
+    padding: 2rem 2rem 1.75rem;
+  }
+  #export-panel h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    margin-bottom: .35rem;
+  }
+  #export-panel h2 em { font-style: italic; color: #f0e68c; }
+  #export-panel p {
+    font-size: .88rem;
+    color: #a09a94;
+    margin-bottom: 1.5rem;
+    line-height: 1.55;
+  }
+  .export-actions {
+    display: flex;
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+  .btn-export {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .75rem 1.4rem;
+    border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .04em;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    text-decoration: none;
+  }
+  .btn-email {
+    background: #f0e68c;
+    color: #1a1714;
+  }
+  .btn-email:hover { background: #fff; }
+  .btn-download {
+    background: transparent;
+    color: #f0e68c;
+    border: 1.5px solid #f0e68c;
+  }
+  .btn-download:hover { background: #f0e68c; color: #1a1714; }
+  .export-note {
+    margin-top: 1rem;
+    font-size: .78rem;
+    color: #6b6560;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1.6;
+  }
+  #export-status {
+    margin-top: .75rem;
+    font-size: .82rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: #a0c878;
+    min-height: 1.2em;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Formas de <em>imprimir</em><br>en Python</h1>
+    <p class="sub">Quiz sobre <code>print()</code> — concatenación, comas y f-strings</p>
+  </div>
+  <div class="legend">
+    <span class="legend-item leg-print">print + concatenación</span>
+    <span class="legend-item leg-comas">print con comas</span>
+    <span class="legend-item leg-fstr">f-string</span>
+  </div>
+</header>
+
+<div id="student-banner">
+  <label for="student-name">👤 Nombre del alumno</label>
+  <input type="text" id="student-name" placeholder="Escribe tu nombre completo antes de empezar…" autocomplete="off">
+</div>
+
+<div class="section-label">Tipo test — 12 preguntas</div>
+<div class="quiz" id="test-quiz"></div>
+
+<div class="section-label" style="margin-top:2.5rem;">Respuesta corta — 5 preguntas</div>
+<div class="quiz" id="short-quiz"></div>
+
+<div id="export-panel">
+  <h2>Enviar resultados al <em>profesor</em></h2>
+  <p>Cuando hayas terminado el quiz, usa los botones de abajo.<br>
+  <strong>Opción 1:</strong> abre tu correo con las respuestas listas para enviar.<br>
+  <strong>Opción 2:</strong> descarga un informe HTML y adjúntalo al correo manualmente.</p>
+  <div class="export-actions">
+    <button class="btn-export btn-email" onclick="exportEmail()">✉ Abrir correo</button>
+    <button class="btn-export btn-download" onclick="exportHTML()">⬇ Descargar informe</button>
+  </div>
+  <div id="export-status"></div>
+  <p class="export-note">⚠ Asegúrate de haber escrito tu nombre antes de exportar.<br>Las preguntas de respuesta corta sin contestar se marcarán como en blanco.</p>
+</div>
+
+<div id="scorebox">Aciertos: <span class="big" id="sc">0</span> / <span id="tot">12</span></div>
+
+<script>
+const T = [
+  // ── print normal / concatenación ──────────────────────────────
+  {
+    badge: 'badge-print', tipo: 'print + concat',
+    q: '¿Qué imprime el siguiente código?',
+    pre: `nombre = <span class="st">"Laura"</span>\n<span class="kw">print</span>(<span class="st">"Hola "</span> + nombre)`,
+    opts: ['Hola nombre', 'Hola Laura', 'Hola + Laura', 'Error'],
+    ans: 1,
+    fb: 'El operador <code>+</code> entre dos cadenas las <strong>concatena</strong>. La variable <code>nombre</code> vale "Laura", así que el resultado es <code>Hola Laura</code>.'
+  },
+  {
+    badge: 'badge-print', tipo: 'print + concat',
+    q: '¿Qué ocurre al ejecutar este código?',
+    pre: `edad = <span class="num">20</span>\n<span class="kw">print</span>(<span class="st">"Tengo "</span> + edad + <span class="st">" años"</span>)`,
+    opts: ['Imprime: Tengo 20 años', 'TypeError: no se puede concatenar str e int', 'Imprime: Tengo edad años', 'SyntaxError'],
+    ans: 1,
+    fb: 'No se puede usar <code>+</code> para unir un <code>str</code> y un <code>int</code> directamente. Hay que convertir primero: <code>str(edad)</code>.'
+  },
+  {
+    badge: 'badge-print', tipo: 'print + concat',
+    q: '¿Cuál de estas líneas imprime correctamente <code>Producto: mesa, Precio: 45</code> usando concatenación con <code>+</code>?',
+    opts: [
+      '<code>print("Producto: " + producto + ", Precio: " + precio)</code>',
+      '<code>print("Producto: " + producto + ", Precio: " + str(precio))</code>',
+      '<code>print("Producto: ", producto, ", Precio: ", precio)</code>',
+      '<code>print("Producto: " + str(producto, precio))</code>'
+    ],
+    ans: 1,
+    fb: 'Con <code>+</code> solo se concatenan cadenas. Como <code>precio</code> es un número, hay que convertirlo con <code>str(precio)</code> antes de unirlo.'
+  },
+
+  // ── print con comas ────────────────────────────────────────────
+  {
+    badge: 'badge-comas', tipo: 'print comas',
+    q: '¿Qué imprime este código?',
+    pre: `ciudad = <span class="st">"Sevilla"</span>\npoblacion = <span class="num">700000</span>\n<span class="kw">print</span>(ciudad, poblacion)`,
+    opts: ['SevillaSevillaSevilla', 'Sevilla700000', 'Sevilla 700000', 'Error'],
+    ans: 2,
+    fb: 'Cuando se pasan varios argumentos separados por comas, <code>print</code> los imprime con un <strong>espacio</strong> entre ellos (sep=" " por defecto).'
+  },
+  {
+    badge: 'badge-comas', tipo: 'print comas',
+    q: '¿Qué imprime este código?',
+    pre: `<span class="kw">print</span>(<span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, sep=<span class="st">"-"</span>)`,
+    opts: ['a b c', 'a-b-c', 'abc', 'a, b, c'],
+    ans: 1,
+    fb: 'El parámetro <code>sep</code> cambia el separador entre argumentos. Con <code>sep="-"</code> el resultado es <code>a-b-c</code>.'
+  },
+  {
+    badge: 'badge-comas', tipo: 'print comas',
+    q: '¿Cuál es la ventaja principal de usar comas en <code>print</code> frente al operador <code>+</code>?',
+    opts: [
+      'Es más rápido de ejecutar',
+      'No hace falta convertir números a cadena con <code>str()</code>',
+      'Permite imprimir más de 3 valores',
+      'Produce exactamente el mismo resultado siempre'
+    ],
+    ans: 1,
+    fb: 'Con comas, <code>print</code> acepta cualquier tipo de dato y lo convierte solo. No hay que escribir <code>str()</code> para los números.'
+  },
+  {
+    badge: 'badge-comas', tipo: 'print comas',
+    q: '¿Qué imprime este código?',
+    pre: `x = <span class="num">5</span>\ny = <span class="num">10</span>\n<span class="kw">print</span>(<span class="st">"Suma:"</span>, x + y, <span class="st">"Producto:"</span>, x * y)`,
+    opts: ['Suma: x + y Producto: x * y', 'Suma: 5 + 10 Producto: 5 * 10', 'Suma: 15 Producto: 50', 'Error'],
+    ans: 2,
+    fb: 'Las expresiones dentro de <code>print</code> se evalúan antes de imprimir. <code>x+y = 15</code> y <code>x*y = 50</code>. Se separan por espacio.'
+  },
+
+  // ── f-string ───────────────────────────────────────────────────
+  {
+    badge: 'badge-fstr', tipo: 'f-string',
+    q: '¿Qué imprime este código?',
+    pre: `nota = <span class="num">8.5</span>\n<span class="kw">print</span>(f<span class="st">"Tu nota es {nota}"</span>)`,
+    opts: ['Tu nota es {nota}', 'Tu nota es nota', 'Tu nota es 8.5', 'f"Tu nota es 8.5"'],
+    ans: 2,
+    fb: 'En una f-string, todo lo que va entre <code>{}</code> se evalúa e inserta en la cadena. <code>{nota}</code> se reemplaza por <code>8.5</code>.'
+  },
+  {
+    badge: 'badge-fstr', tipo: 'f-string',
+    q: '¿Qué imprime este código?',
+    pre: `a = <span class="num">4</span>\nb = <span class="num">3</span>\n<span class="kw">print</span>(f<span class="st">"La suma de {a} y {b} es {a+b}"</span>)`,
+    opts: ['La suma de a y b es a+b', 'La suma de 4 y 3 es a+b', 'La suma de 4 y 3 es 7', 'Error'],
+    ans: 2,
+    fb: 'Dentro de las llaves de una f-string puedes poner <strong>expresiones</strong>, no solo variables. <code>{a+b}</code> se evalúa a <code>7</code>.'
+  },
+  {
+    badge: 'badge-fstr', tipo: 'f-string',
+    q: '¿Cuál es la sintaxis correcta para crear una f-string?',
+    opts: [
+      '<code>print("Hola {nombre}")</code>',
+      '<code>print(f"Hola {nombre}")</code>',
+      '<code>print(f"Hola (nombre)")</code>',
+      '<code>print("f Hola {nombre}")</code>'
+    ],
+    ans: 1,
+    fb: 'La <code>f</code> debe ir inmediatamente antes de las comillas: <code>f"..."</code>. Sin ella, las llaves se imprimen literalmente.'
+  },
+
+  // ── comparativa / mixtas ───────────────────────────────────────
+  {
+    badge: 'badge-mixed', tipo: 'comparativa',
+    q: 'Estas tres líneas producen la misma salida: <code>Nombre: Ana, Edad: 22</code>. ¿Cuál usa f-string?',
+    opts: [
+      '<code>print("Nombre: " + nombre + ", Edad: " + str(edad))</code>',
+      '<code>print("Nombre:", nombre, ", Edad:", edad)</code>',
+      '<code>print(f"Nombre: {nombre}, Edad: {edad}")</code>',
+      'Las tres producen exactamente el mismo resultado'
+    ],
+    ans: 2,
+    fb: 'La opción con <code>f"..."</code> y variables entre llaves es la f-string. Nota: la opción de comas añade espacios extras, así que en realidad no produce exactamente la misma salida.'
+  },
+  {
+    badge: 'badge-mixed', tipo: 'comparativa',
+    q: '¿Cuál de estas formas de print NO requiere convertir un número entero a cadena?',
+    opts: [
+      '<code>print("Valor: " + numero)</code>',
+      '<code>print("Valor: " + str(numero))</code>',
+      '<code>print(f"Valor: {numero}")</code>',
+      'Todas requieren conversión'
+    ],
+    ans: 2,
+    fb: 'La f-string convierte automáticamente el valor de la variable al incluirlo entre llaves. Con <code>+</code> es obligatorio usar <code>str()</code>.'
+  },
+];
+
+const S = [
+  {
+    badge: 'badge-print', tipo: 'print + concat',
+    q: 'Tienes las variables <code>producto = "silla"</code> y <code>precio = 59</code>. Escribe la línea <code>print</code> que muestre <code>El producto silla cuesta 59 euros</code> usando el operador <code>+</code>.',
+    model: `<strong>Respuesta:</strong><br><code>print("El producto " + producto + " cuesta " + str(precio) + " euros")</code><br><br>Es necesario usar <code>str(precio)</code> porque <code>precio</code> es un <code>int</code> y el operador <code>+</code> no mezcla tipos distintos.`
+  },
+  {
+    badge: 'badge-comas', tipo: 'print comas',
+    q: 'Con las mismas variables anteriores (<code>producto = "silla"</code>, <code>precio = 59</code>), escribe la misma frase usando comas. ¿Qué diferencia habrá en la salida respecto al ejercicio anterior?',
+    model: `<strong>Respuesta:</strong><br><code>print("El producto", producto, "cuesta", precio, "euros")</code><br><br><strong>Diferencia:</strong> La salida tendrá espacios extra alrededor de los valores: <code>El producto silla cuesta 59 euros</code> — el resultado es idéntico en este caso, pero si los textos ya llevan espacios, con comas aparecerían dobles. Además, con comas <strong>no hace falta convertir</strong> <code>precio</code> a cadena.`
+  },
+  {
+    badge: 'badge-fstr', tipo: 'f-string',
+    q: 'Escribe la misma frase una tercera vez usando f-string. Además, modifícala para que muestre el precio con el símbolo <code>€</code> justo detrás del número, sin espacio: <code>El producto silla cuesta 59€</code>.',
+    model: `<strong>Respuesta:</strong><br><code>print(f"El producto {producto} cuesta {precio}€")</code><br><br>Con f-string es muy fácil añadir texto justo después de una variable dentro de las llaves o fuera de ellas: <code>{precio}€</code> pega el símbolo sin espacio.`
+  },
+  {
+    badge: 'badge-fstr', tipo: 'f-string',
+    q: 'Explica la diferencia entre <code>print("El doble es", n*2)</code> y <code>print(f"El doble es {n*2}")</code>. ¿Producen la misma salida? ¿Cuándo preferirías una sobre la otra?',
+    model: `<strong>Respuesta:</strong><br>Ambas evalúan <code>n*2</code> e imprimen el resultado. La <strong>salida es prácticamente idéntica</strong> (la versión con comas añade un espacio antes de cada argumento).<br><br><strong>¿Cuándo usar cada una?</strong><ul style="margin:.5rem 0 0 1rem"><li>Comas: rápido para depurar, no hace falta pensar en la cadena.</li><li>f-string: cuando necesitas <strong>controlar exactamente</strong> el formato del texto, sin espacios extra, o cuando mezclas muchos valores en una frase.</li></ul>`
+  },
+  {
+    badge: 'badge-mixed', tipo: 'comparativa',
+    q: 'Dado el siguiente bloque de variables:<br><br><code>nombre = "Carlos"</code><br><code>edad = 17</code><br><code>ciudad = "Málaga"</code><br><br>Escribe la misma oración <em>"Carlos tiene 17 años y vive en Málaga"</em> usando las tres formas: concatenación con <code>+</code>, comas y f-string.',
+    model: `<strong>Con concatenación (+):</strong><br><code>print("Carlos tiene " + str(edad) + " años y vive en " + ciudad)</code><br><br><strong>Con comas:</strong><br><code>print(nombre, "tiene", edad, "años y vive en", ciudad)</code><br><br><strong>Con f-string:</strong><br><code>print(f"{nombre} tiene {edad} años y vive en {ciudad}")</code><br><br>Fíjate: solo el <code>+</code> necesita <code>str(edad)</code>. Las comas añaden espacios automáticos entre argumentos, mientras que la f-string te da control total del formato.`
+  },
+];
+
+// ── shuffle (Fisher-Yates) ───────────────────────────────────────
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Barajar preguntas tipo test y sus opciones al cargar la página
+const T_shuffled = shuffle(T).map(q => {
+  // Construir array de opciones con índice original
+  const optsIndexed = q.opts.map((text, idx) => ({ text, isCorrect: idx === q.ans }));
+  const optsShuffled = shuffle(optsIndexed);
+  const newAns = optsShuffled.findIndex(o => o.isCorrect);
+  return { ...q, opts: optsShuffled.map(o => o.text), ans: newAns };
+});
+
+// Barajar preguntas de respuesta corta
+const S_shuffled = shuffle(S);
+
+// ── render test ─────────────────────────────────────────────────
+let score = 0;
+// Track answers: testAnswers[qi] = { chosen, correct, chosenText, correctText, questionText }
+const testAnswers = {};
+document.getElementById('tot').textContent = T_shuffled.length;
+const tq = document.getElementById('test-quiz');
+
+T_shuffled.forEach((q, qi) => {
+  const letters = ['A','B','C','D'];
+  const card = document.createElement('div');
+  card.className = 'card';
+  const preHtml = q.pre ? `<pre>${q.pre}</pre>` : '';
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="badge ${q.badge}">${q.tipo}</span>
+      <span class="q-text">${q.q}</span>
+    </div>
+    ${preHtml}
+    <div class="options">
+      ${q.opts.map((o,i)=>`<div class="opt" data-qi="${qi}" data-i="${i}">
+        <span class="opt-key">${letters[i]}</span>${o}
+      </div>`).join('')}
+    </div>
+    <div class="feedback" id="fb-${qi}"></div>
+  `;
+  tq.appendChild(card);
+});
+
+tq.addEventListener('click', e => {
+  const opt = e.target.closest('.opt');
+  if (!opt) return;
+  const qi = +opt.dataset.qi, i = +opt.dataset.i;
+  const card = opt.closest('.card');
+  if (card.dataset.done) return;
+  card.dataset.done = '1';
+  const q = T_shuffled[qi];
+  const fb = document.getElementById(`fb-${qi}`);
+  const all = card.querySelectorAll('.opt');
+  const isCorrect = i === q.ans;
+
+  // Strip HTML tags for plain text export
+  const stripHtml = s => s.replace(/<[^>]+>/g,'');
+  testAnswers[qi] = {
+    isCorrect,
+    chosenLetter: ['A','B','C','D'][i],
+    correctLetter: ['A','B','C','D'][q.ans],
+    chosenText: stripHtml(q.opts[i]),
+    correctText: stripHtml(q.opts[q.ans]),
+    questionText: stripHtml(q.q),
+    tipo: q.tipo
+  };
+
+  if (isCorrect) {
+    opt.classList.add('correct');
+    fb.innerHTML = '✓ Correcto — ' + q.fb;
+    fb.className = 'feedback show ok';
+    score++;
+    document.getElementById('sc').textContent = score;
+  } else {
+    opt.classList.add('wrong');
+    all[q.ans].classList.add('show-correct');
+    fb.innerHTML = '✗ Incorrecto — ' + q.fb;
+    fb.className = 'feedback show ko';
+  }
+});
+
+// ── render short ────────────────────────────────────────────────
+const sq = document.getElementById('short-quiz');
+S_shuffled.forEach((q, qi) => {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <div class="card-top">
+      <span class="badge ${q.badge}">${q.tipo}</span>
+      <span class="q-text">${q.q}</span>
+    </div>
+    <div class="short-body">
+      <textarea id="short-ta-${qi}" placeholder="Escribe tu respuesta…"></textarea><br>
+      <button class="reveal-btn" data-qi="${qi}">Ver respuesta modelo ↓</button>
+      <div class="model-answer" id="ma-${qi}">${q.model}</div>
+    </div>
+  `;
+  sq.appendChild(card);
+});
+
+sq.addEventListener('click', e => {
+  const btn = e.target.closest('.reveal-btn');
+  if (!btn) return;
+  const ma = document.getElementById(`ma-${btn.dataset.qi}`);
+  const open = ma.classList.toggle('show');
+  btn.textContent = open ? 'Ocultar respuesta ↑' : 'Ver respuesta modelo ↓';
+});
+
+// ── export helpers ───────────────────────────────────────────────
+function getStudentName() {
+  return document.getElementById('student-name').value.trim() || '(sin nombre)';
+}
+
+function getNow() {
+  return new Date().toLocaleString('es-ES', { dateStyle:'long', timeStyle:'short' });
+}
+
+function stripHtml(s) {
+  const tmp = document.createElement('div');
+  tmp.innerHTML = s;
+  return tmp.textContent || tmp.innerText || '';
+}
+
+function buildReportData() {
+  const name = getStudentName();
+  const date = getNow();
+  const totalTest = T_shuffled.length;
+  const answered = Object.keys(testAnswers).length;
+
+  const testRows = T_shuffled.map((q, qi) => {
+    const a = testAnswers[qi];
+    if (!a) return { q: stripHtml(q.q), tipo: q.tipo, status: 'Sin contestar', chosen: '—', correct: stripHtml(q.opts[q.ans]), isCorrect: false };
+    return {
+      q: a.questionText,
+      tipo: a.tipo,
+      status: a.isCorrect ? 'Correcto' : 'Incorrecto',
+      chosen: `${a.chosenLetter}) ${a.chosenText}`,
+      correct: `${a.correctLetter}) ${a.correctText}`,
+      isCorrect: a.isCorrect
+    };
+  });
+
+  const shortRows = S_shuffled.map((q, qi) => {
+    const ta = document.getElementById(`short-ta-${qi}`);
+    return {
+      q: stripHtml(q.q),
+      tipo: q.tipo,
+      answer: ta ? ta.value.trim() : ''
+    };
+  });
+
+  return { name, date, score, totalTest, answered, testRows, shortRows };
+}
+
+// ── export: email ────────────────────────────────────────────────
+function exportEmail() {
+  const d = buildReportData();
+  if (d.name === '(sin nombre)') {
+    document.getElementById('export-status').textContent = '⚠ Por favor, escribe tu nombre antes de enviar.';
+    document.getElementById('student-name').focus();
+    return;
+  }
+
+  const sep = '─'.repeat(60);
+  let body = '';
+  body += `QUIZ PYTHON — Formas de imprimir con print\n`;
+  body += `${sep}\n`;
+  body += `Alumno : ${d.name}\n`;
+  body += `Fecha  : ${d.date}\n`;
+  body += `Nota   : ${d.score} / ${d.totalTest} (tipo test)\n`;
+  body += `${sep}\n\n`;
+
+  body += `SECCIÓN 1 — TIPO TEST\n\n`;
+  d.testRows.forEach((r, i) => {
+    body += `[${i+1}] ${r.q}\n`;
+    body += `    Tipo      : ${r.tipo}\n`;
+    body += `    Respuesta : ${r.chosen}\n`;
+    body += `    Resultado : ${r.status}\n`;
+    if (!r.isCorrect && r.status !== 'Sin contestar') {
+      body += `    Correcta  : ${r.correct}\n`;
+    }
+    body += '\n';
+  });
+
+  body += `${sep}\n\n`;
+  body += `SECCIÓN 2 — RESPUESTA CORTA\n\n`;
+  d.shortRows.forEach((r, i) => {
+    body += `[R${i+1}] ${r.q}\n`;
+    body += `    Tipo      : ${r.tipo}\n`;
+    body += `    Respuesta :\n`;
+    const ans = r.answer || '(en blanco)';
+    ans.split('\n').forEach(line => { body += `      ${line}\n`; });
+    body += '\n';
+  });
+
+  body += `${sep}\n`;
+  body += `Generado desde el quiz interactivo de Python`;
+
+  const subject = encodeURIComponent(`Quiz Python — ${d.name} — ${d.score}/${d.totalTest}`);
+  const bodyEnc = encodeURIComponent(body);
+  window.location.href = `mailto:?subject=${subject}&body=${bodyEnc}`;
+  document.getElementById('export-status').textContent = '✓ Se ha abierto tu cliente de correo.';
+}
+
+// ── export: HTML report ─────────────────────────────────────────
+function exportHTML() {
+  const d = buildReportData();
+  if (d.name === '(sin nombre)') {
+    document.getElementById('export-status').textContent = '⚠ Por favor, escribe tu nombre antes de exportar.';
+    document.getElementById('student-name').focus();
+    return;
+  }
+
+  const pct = Math.round((d.score / d.totalTest) * 100);
+  const grade = pct >= 90 ? '#2ecc71' : pct >= 60 ? '#f39c12' : '#e74c3c';
+
+  let testHtml = '';
+  d.testRows.forEach((r, i) => {
+    const color = r.status === 'Correcto' ? '#1e8449' : r.status === 'Sin contestar' ? '#888' : '#c0392b';
+    const icon  = r.status === 'Correcto' ? '✓' : r.status === 'Sin contestar' ? '—' : '✗';
+    testHtml += `
+    <tr>
+      <td style="padding:.6rem .8rem;font-weight:600;vertical-align:top;color:#555;font-size:.8rem;">${i+1}</td>
+      <td style="padding:.6rem .8rem;vertical-align:top;font-size:.88rem;">${r.q}</td>
+      <td style="padding:.6rem .8rem;vertical-align:top;font-size:.8rem;color:#777;">${r.tipo}</td>
+      <td style="padding:.6rem .8rem;vertical-align:top;font-family:monospace;font-size:.85rem;">${r.chosen}</td>
+      <td style="padding:.6rem .8rem;vertical-align:top;text-align:center;font-weight:700;color:${color};">${icon} ${r.status}</td>
+      ${!r.isCorrect && r.status !== 'Sin contestar' ? `<td style="padding:.6rem .8rem;vertical-align:top;font-family:monospace;font-size:.85rem;color:#1e8449;">${r.correct}</td>` : '<td></td>'}
+    </tr>`;
+  });
+
+  let shortHtml = '';
+  d.shortRows.forEach((r, i) => {
+    const ans = (r.answer || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
+    shortHtml += `
+    <div style="margin-bottom:1.5rem;padding:1rem 1.25rem;background:#fafafa;border:1px solid #e5e5e5;border-left:4px solid #1a5276;border-radius:6px;">
+      <div style="font-weight:700;font-size:.88rem;margin-bottom:.5rem;color:#1a5276;">R·${i+1} <span style="font-weight:400;color:#888;font-size:.8rem;">[${r.tipo}]</span></div>
+      <div style="font-size:.9rem;margin-bottom:.75rem;line-height:1.5;">${r.q.replace(/\n/g,'<br>')}</div>
+      <div style="background:#fff;border:1px solid #ddd;border-radius:4px;padding:.75rem 1rem;font-family:monospace;font-size:.88rem;line-height:1.65;color:${r.answer ? '#222' : '#aaa'};font-style:${r.answer ? 'normal' : 'italic'};">
+        ${ans || '(sin respuesta)'}
+      </div>
+    </div>`;
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Informe Quiz Python — ${d.name}</title>
+<style>
+  body{font-family:'Segoe UI',Arial,sans-serif;background:#f4f4f4;margin:0;padding:2rem 1rem;}
+  .wrap{max-width:860px;margin:0 auto;}
+  .header{background:#1a1714;color:#f0f0f0;border-radius:10px 10px 0 0;padding:2rem 2.5rem;}
+  .header h1{font-size:1.6rem;margin:0 0 .25rem;}
+  .header .meta{font-size:.85rem;color:#a09a94;margin-top:.5rem;line-height:1.8;}
+  .score-box{background:#fff;padding:1.5rem 2.5rem;border-bottom:3px solid #eee;display:flex;align-items:center;gap:2rem;flex-wrap:wrap;}
+  .score-big{font-size:2.8rem;font-weight:900;color:${grade};}
+  .score-label{font-size:.85rem;color:#888;}
+  .score-pct{font-size:1.1rem;font-weight:700;color:${grade};}
+  .section{background:#fff;padding:1.75rem 2.5rem;margin-top:2px;}
+  .section h2{font-size:1rem;letter-spacing:.1em;text-transform:uppercase;color:#999;border-bottom:1px solid #eee;padding-bottom:.5rem;margin-bottom:1.25rem;}
+  table{width:100%;border-collapse:collapse;}
+  thead th{background:#f8f8f8;padding:.6rem .8rem;font-size:.75rem;letter-spacing:.07em;text-transform:uppercase;color:#888;text-align:left;border-bottom:2px solid #eee;}
+  tbody tr:nth-child(even){background:#fafafa;}
+  .footer{background:#1a1714;color:#666;font-size:.75rem;padding:1rem 2.5rem;border-radius:0 0 10px 10px;font-family:monospace;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h1>Informe de Quiz · Python</h1>
+    <div>Formas de imprimir con <code style="background:rgba(255,255,255,.1);padding:.1rem .4rem;border-radius:3px;">print()</code></div>
+    <div class="meta">
+      Alumno: <strong style="color:#fff;">${d.name}</strong><br>
+      Fecha: ${d.date}<br>
+      Preguntas tipo test respondidas: ${d.answered} / ${d.totalTest}
+    </div>
+  </div>
+
+  <div class="score-box">
+    <div>
+      <div class="score-label">Aciertos (tipo test)</div>
+      <div class="score-big">${d.score}<span style="font-size:1.2rem;color:#ccc;"> / ${d.totalTest}</span></div>
+    </div>
+    <div>
+      <div class="score-label">Porcentaje</div>
+      <div class="score-pct">${pct}%</div>
+    </div>
+    <div style="flex:1;text-align:right;font-size:.8rem;color:#bbb;">
+      Las respuestas cortas requieren<br>corrección manual del profesor.
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Sección 1 — Tipo test</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th><th>Pregunta</th><th>Tipo</th><th>Respuesta del alumno</th><th>Resultado</th><th>Correcta (si falló)</th>
+        </tr>
+      </thead>
+      <tbody>${testHtml}</tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Sección 2 — Respuesta corta</h2>
+    ${shortHtml}
+  </div>
+
+  <div class="footer">Generado el ${d.date} · Quiz interactivo Python</div>
+</div>
+</body>
+</html>`;
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safeName = d.name.replace(/[^a-zA-Z0-9áéíóúüñÁÉÍÓÚÜÑ \-_]/g,'').trim().replace(/ /g,'_');
+  a.href = url;
+  a.download = `quiz_python_${safeName}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+  document.getElementById('export-status').textContent = `✓ Informe descargado: quiz_python_${safeName}.html`;
+}
+</script>
+</body>
+</html>
