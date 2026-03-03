@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterClass Python: Estructuras Selectivas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4caf50; /* Verde para diferenciar esta unidad */
+            --secondary: #2e7d32;
+            --accent: #feca1b;
+            --bg: #f4f4f9;
+            --dark: #333;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        header { background: var(--primary); color: white; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        
+        .slide { background: white; padding: 2.5rem; border-radius: 15px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 8px solid var(--secondary); display: none; }
+        .slide.active { display: block; animation: fadeIn 0.5s; }
+        
+        h2 { color: var(--secondary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: var(--secondary); margin-top: 1.5rem; }
+
+        /* Estilo de Código */
+        pre { background: var(--code-bg); color: #abb2bf; padding: 1.5rem; border-radius: 10px; overflow-x: auto; font-size: 1rem; position: relative; }
+        .keyword { color: #c678dd; font-weight: bold; } 
+        .func { color: #61afef; } 
+        .str { color: #98c379; } 
+        .num { color: #d19a66; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        .card { background: #e8f5e9; padding: 1.2rem; border-radius: 10px; border-left: 4px solid var(--primary); margin: 10px 0; }
+        .warning { background: #fff3e0; border-left: 4px solid #ff9800; padding: 1rem; border-radius: 10px; }
+        
+        .controls { text-align: center; margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .btn-nav { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-nav:hover { background: var(--primary); transform: scale(1.05); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-project-diagram"></i> Toma de Decisiones en Python</h1>
+        <p>Estructuras If, Elif, Else y Match</p>
+    </header>
+
+    <div class="slide active" id="slide1">
+        <h2><i class="fas fa-question"></i> 1. El Condicional Simple: <code>if</code></h2>
+        <p>Se usa para ejecutar un bloque de código <strong>solo si</strong> se cumple una condición.</p>
+        
+        <pre>
+nivel = <span class="num">18</span>
+
+<span class="keyword">if</span> nivel >= <span class="num">18</span>:
+    <span class="func">print</span>(<span class="str">"¡Tu Pokémon puede evolucionar!"</span>)
+    <span class="func">print</span>(<span class="str">"Preparando animación..."</span>)</pre>
+
+        <div class="warning">
+            <strong>⚠️ ¡Atención a la Indentación!</strong><br>
+            En Python, todo lo que esté "dentro" del IF debe llevar 4 espacios (o un Tabulador). Si no lo haces, Python no sabrá qué código depende de la condición.
+        </div>
+        
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2><i class="fas fa-random"></i> 2. Si no ocurre... <code>else</code></h2>
+        <p>Sirve para dar una alternativa cuando la condición <strong>no</strong> se cumple.</p>
+        
+        <pre>
+hp = <span class="num">0</span>
+
+<span class="keyword">if</span> hp > <span class="num">0</span>:
+    <span class="func">print</span>(<span class="str">"¡El Pokémon sigue luchando!"</span>)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="str">"El Pokémon se ha debilitado..."</span>)
+    <span class="func">print</span>(<span class="str">"Llévalo al Centro Pokémon."</span>)</pre>
+        
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2><i class="fas fa-list-ul"></i> 3. Múltiples opciones: <code>elif</code></h2>
+        <p>Cuando tienes más de dos caminos posibles. Es una abreviatura de "Else If".</p>
+        
+        <pre>
+pokemon = <span class="str">"Charmander"</span>
+
+<span class="keyword">if</span> pokemon == <span class="str">"Charmander"</span>:
+    <span class="func">print</span>(<span class="str">"Tipo Fuego 🔥"</span>)
+<span class="keyword">elif</span> pokemon == <span class="str">"Squirtle"</span>:
+    <span class="func">print</span>(<span class="str">"Tipo Agua 💧"</span>)
+<span class="keyword">elif</span> pokemon == <span class="str">"Bulbasaur"</span>:
+    <span class="func">print</span>(<span class="str">"Tipo Planta 🌿"</span>)
+<span class="keyword">else</span>:
+    <span class="func">print</span>(<span class="str">"Tipo desconocido ❓"</span>)</pre>
+        <div class="card">
+            Python revisa las condiciones de arriba a abajo. En cuanto una es <strong>True</strong>, ejecuta su código y se salta el resto.
+        </div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <h2><i class="fas fa-th-list"></i> 4. El nuevo <code>match</code></h2>
+        <p>Introducido en Python 3.10, es una forma más limpia de hacer muchos <code>elif</code> cuando comparas una misma variable.</p>
+        
+        <pre>
+comando = <span class="str">"Atacar"</span>
+
+<span class="keyword">match</span> comando:
+    <span class="keyword">case</span> <span class="str">"Atacar"</span>:
+        <span class="func">print</span>(<span class="str">"¡Has usado Placaje!"</span>)
+    <span class="keyword">case</span> <span class="str">"Pocion"</span>:
+        <span class="func">print</span>(<span class="str">"¡Vida recuperada!"</span>)
+    <span class="keyword">case</span> <span class="str">"Huir"</span>:
+        <span class="func">print</span>(<span class="str">"Has escapado sano y salvo."</span>)
+    <span class="keyword">case</span> <span class="keyword">_</span>:  <span class="comment"># Este es el caso por defecto (como el else)</span>
+        <span class="func">print</span>(<span class="str">"Comando no reconocido."</span>)</pre>
+        
+        <div class="card">
+            <strong>¿Por qué usar Match?</strong> Es mucho más fácil de leer cuando tienes un menú de opciones o una lista larga de casos.
+        </div>
+    </div>
+
+    <div class="slide" id="slide5">
+        <h2><i class="fas fa-gamepad"></i> 5. Proyecto: Menú de Combate</h2>
+        <p>Combinamos todo: mostramos un menú, pedimos una opción y decidimos qué hacer.</p>
+        
+        <pre>
+<span class="comment"># 1. Mostramos las opciones</span>
+<span class="func">print</span>(<span class="str">"--- MENÚ DE COMBATE ---"</span>)
+<span class="func">print</span>(<span class="str">"1. Atacar"</span>)
+<span class="func">print</span>(<span class="str">"2. Usar Poción"</span>)
+<span class="func">print</span>(<span class="str">"3. Huir"</span>)
+
+<span class="comment"># 2. Pedimos la opción al usuario</span>
+opcion = <span class="func">input</span>(<span class="str">"Selecciona una opción (1-3): "</span>)
+
+<span class="comment"># 3. Gestionamos la decisión con match</span>
+<span class="keyword">match</span> opcion:
+    <span class="keyword">case</span> <span class="str">"1"</span>:
+        <span class="func">print</span>(<span class="str">"¡Pikachu usa Rayo! ⚡"</span>)
+    <span class="keyword">case</span> <span class="str">"2"</span>:
+        <span class="func">print</span>(<span class="str">"Has recuperado 20 HP 🧪"</span>)
+    <span class="keyword">case</span> <span class="str">"3"</span>:
+        <span class="func">print</span>(<span class="str">"Escapaste del combate... 🏃"</span>)
+    <span class="keyword">case</span> <span class="keyword">_</span>:
+        <span class="func">print</span>(<span class="str">"Error: Opción no válida."</span>)</pre>
+
+        <div class="card">
+            <strong>💡 Nota importante:</strong> 
+            Fíjate que en los <code>case</code> usamos <code>"1"</code> (con comillas). Esto es porque <code>input()</code> nos da un <strong>String</strong>. Si quisiéramos usar números sin comillas, tendríamos que haber hecho <code>int(input(...))</code> antes.
+        </div>
+        
+    </div>
+
+    <div class="controls">
+        <button class="btn-nav" onclick="changeSlide(-1)"><i class="fas fa-arrow-left"></i> Anterior</button>
+        <b id="page-info">1 / 5</b>
+        <button class="btn-nav" onclick="changeSlide(1)">Siguiente <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function changeSlide(direction) {
+        document.getElementById(`slide${currentSlide}`).classList.remove('active');
+        currentSlide += direction;
+        if (currentSlide > totalSlides) currentSlide = 1;
+        if (currentSlide < 1) currentSlide = totalSlides;
+        document.getElementById(`slide${currentSlide}`).classList.add('active');
+        document.getElementById('page-info').innerText = `${currentSlide} / ${totalSlides}`;
+    }
+</script>
+
+</body>
+</html>
