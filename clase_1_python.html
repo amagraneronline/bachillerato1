@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterClass Python: Fundamentos de Variables</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2196f3; /* Azul para la unidad de fundamentos */
+            --secondary: #1976d2;
+            --accent: #ffeb3b;
+            --bg: #f4f4f9;
+            --dark: #333;
+            --code-bg: #282c34;
+        }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--dark); line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 1000px; margin: auto; }
+        header { background: var(--primary); color: white; padding: 2rem; border-radius: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        
+        .slide { background: white; padding: 2.5rem; border-radius: 15px; margin-bottom: 2rem; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border-left: 8px solid var(--secondary); display: none; }
+        .slide.active { display: block; animation: fadeIn 0.5s; }
+        
+        h2 { color: var(--secondary); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        h3 { color: var(--secondary); margin-top: 1.5rem; }
+
+        pre { background: var(--code-bg); color: #abb2bf; padding: 1.5rem; border-radius: 10px; overflow-x: auto; font-size: 1rem; }
+        .keyword { color: #c678dd; } 
+        .func { color: #61afef; } 
+        .str { color: #98c379; } 
+        .num { color: #d19a66; }
+        .comment { color: #5c6370; font-style: italic; }
+
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #e3f2fd; }
+
+        .card { background: #e3f2fd; padding: 1.2rem; border-radius: 10px; border-left: 4px solid var(--primary); margin: 10px 0; }
+        
+        .controls { text-align: center; margin-top: 2rem; display: flex; justify-content: center; align-items: center; gap: 20px; }
+        .btn-nav { background: var(--secondary); color: white; border: none; padding: 12px 25px; border-radius: 30px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-nav:hover { background: var(--primary); transform: scale(1.05); }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1><i class="fas fa-box-open"></i> Python Nivel 0: Variables y Datos</h1>
+        <p>Aprende a guardar información y mostrarla al mundo</p>
+    </header>
+
+    <div class="slide active" id="slide1">
+        <h2><i class="fas fa-edit"></i> 1. ¿Qué es una Variable?</h2>
+        <p>Imagina una variable como una <strong>caja con nombre</strong> donde guardas un valor usando el signo igual (<code>=</code>).</p>
+        
+        <pre>
+<span class="comment"># El signo "=" no significa "igualdad matemática", significa "GUARDAR"</span>
+nombre_entrenador = <span class="str">"Ash"</span>
+pokemon_inicial = <span class="str">"Pikachu"</span>
+nivel = <span class="num">5</span></pre>
+
+        <div class="card">
+            <strong>Reglas de oro:</strong>
+            <ul>
+                <li>No pueden empezar con números.</li>
+                <li>No pueden tener espacios (usamos el guion bajo <code>_</code>).</li>
+                <li>Python distingue entre mayúsculas y minúsculas.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide" id="slide2">
+        <h2><i class="fas fa-th-list"></i> 2. Los Tipos de Datos</h2>
+        <p>No todas las cajas guardan lo mismo. En Python tenemos 4 tipos básicos:</p>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Nombre</th>
+                    <th>Ejemplo</th>
+                    <th>Uso</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>str</strong></td><td>String</td><td><code>"Fuego"</code></td><td>Texto (siempre entre comillas)</td></tr>
+                <tr><td><strong>int</strong></td><td>Integer</td><td><code>25</code></td><td>Números enteros (sin decimales)</td></tr>
+                <tr><td><strong>float</strong></td><td>Float</td><td><code>1.75</code></td><td>Números con decimales</td></tr>
+                <tr><td><strong>bool</strong></td><td>Boolean</td><td><code>True</code></td><td>Valores Lógicos (Verdadero/Falso)</td></tr>
+            </tbody>
+        </table>
+        
+    </div>
+
+    <div class="slide" id="slide3">
+        <h2><i class="fas fa-print"></i> 3. Mostrar Datos: <code>print()</code></h2>
+        <p>Para unir o "concatenar" valores, podemos usar la coma <code>,</code> o el símbolo <code>+</code>.</p>
+        
+        <pre>
+nombre = <span class="str">"Bulbasaur"</span>
+tipo = <span class="str">"Planta"</span>
+
+<span class="comment"># Usando comas (añade un espacio automático)</span>
+<span class="func">print</span>(<span class="str">"Tu Pokémon es"</span>, nombre, <span class="str">"y es tipo"</span>, tipo)
+
+<span class="comment"># Usando + (solo para texto, NO añade espacio)</span>
+<span class="func">print</span>(<span class="str">"Pokémon: "</span> + nombre)</pre>
+        <div class="card">
+            <strong>Ojo:</strong> No puedes usar <code>+</code> para unir un texto con un número (int). Para eso, ¡mejor usa la coma o el f-string!
+        </div>
+    </div>
+
+    <div class="slide" id="slide4">
+        <h2><i class="fas fa-magic"></i> 4. Cadenas de Formato: <code>f-print</code></h2>
+        <p>Es la forma más moderna y cómoda de escribir mensajes mezclando variables y texto.</p>
+        
+        <pre>
+nombre = <span class="str">"Charmander"</span>
+hp = <span class="num">39</span>
+
+<span class="comment"># Ponemos una 'f' antes de las comillas </span>
+<span class="comment"># y las variables entre llaves { }</span>
+<span class="func">print</span>(f<span class="str">"El Pokémon {nombre} tiene {hp} puntos de vida."</span>)</pre>
+        
+        <div class="card">
+            <strong>Ventaja:</strong> Puedes hacer cálculos dentro de las llaves: <br>
+            <code>print(f"El doble de la vida es: {hp * 2}")</code>
+        </div>
+    </div>
+
+<div class="slide" id="slide5">
+        <h2><i class="fas fa-outdent"></i> 5. Trucos de <code>print</code>: sep y end</h2>
+        <p>Por defecto, <code>print()</code> separa los elementos con un espacio y al final salta a la línea siguiente. ¡Pero podemos cambiarlo!</p>
+        
+        <h3>A. El parámetro <code>sep</code> (Separador)</h3>
+        <p>Define qué carácter aparece <strong>entre</strong> los elementos que imprimes.</p>
+        <pre>
+<span class="comment"># Ejemplo: Crear una ruta de evolución</span>
+<span class="func">print</span>(<span class="str">"Pichu"</span>, <span class="str">"Pikachu"</span>, <span class="str">"Raichu"</span>, sep=<span class="str">" -> "</span>)
+<span class="comment"># Resultado: Pichu -> Pikachu -> Raichu</span>
+
+<span class="comment"># Ejemplo: Formato de fecha para un registro</span>
+dia, mes, año = <span class="num">10</span>, <span class="num">05</span>, <span class="num">2024</span>
+<span class="func">print</span>(dia, mes, año, sep=<span class="str">"/"</span>)
+<span class="comment"># Resultado: 10/05/2024</span></pre>
+
+        <h3>B. El parámetro <code>end</code> (Finalizador)</h3>
+        <p>Define qué se imprime <strong>al final</strong>. Por defecto es un salto de línea (<code>\n</code>). Si lo cambias, el siguiente print aparecerá pegado al anterior.</p>
+        <pre>
+<span class="comment"># Ejemplo: Barra de carga de salud</span>
+<span class="func">print</span>(<span class="str">"Salud: ["</span>, end=<span class="str">""</span>)
+<span class="func">print</span>(<span class="str">"##########"</span>, end=<span class="str">""</span>)
+<span class="func">print</span>(<span class="str">"] 100%"</span>)
+<span class="comment"># Resultado: Salud: [##########] 100% (¡Todo en una sola línea!)</span></pre>
+
+        <div class="grid">
+            <div class="card">
+                <strong>💡 Caso de uso <code>sep=""</code></strong><br>
+                Si quieres unir cosas sin ningún espacio entre ellas: <br>
+                <code>print("Nivel", 50, sep="")</code> <br>
+                Resultado: <strong>Nivel50</strong>
+            </div>
+            <div class="card">
+                <strong>💡 Caso de uso <code>end=" "</code></strong><br>
+                Úsalo para que varios <code>print</code> se vean como una frase continua en lugar de una lista vertical.
+            </div>
+        </div>
+        
+        
+    </div>
+
+    <div class="controls">
+        <button class="btn-nav" onclick="changeSlide(-1)"><i class="fas fa-arrow-left"></i> Anterior</button>
+        <b id="page-info">1 / 5</b>
+        <button class="btn-nav" onclick="changeSlide(1)">Siguiente <i class="fas fa-arrow-right"></i></button>
+    </div>
+</div>
+
+<script>
+    let currentSlide = 1;
+    const totalSlides = 5;
+
+    function changeSlide(direction) {
+        document.getElementById(`slide${currentSlide}`).classList.remove('active');
+        currentSlide += direction;
+        if (currentSlide > totalSlides) currentSlide = 1;
+        if (currentSlide < 1) currentSlide = totalSlides;
+        document.getElementById(`slide${currentSlide}`).classList.add('active');
+        document.getElementById('page-info').innerText = `${currentSlide} / ${totalSlides}`;
+    }
+</script>
+
+</body>
+</html>
