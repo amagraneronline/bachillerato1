@@ -684,18 +684,6 @@ const T = [
   // ── comparativa / mixtas ───────────────────────────────────────
   {
     badge: 'badge-mixed', tipo: 'comparativa',
-    q: 'Estas tres líneas producen la misma salida: <code>Nombre: Ana, Edad: 22</code>. ¿Cuál usa f-string?',
-    opts: [
-      '<code>print("Nombre: " + nombre + ", Edad: " + str(edad))</code>',
-      '<code>print("Nombre:", nombre, ", Edad:", edad)</code>',
-      '<code>print(f"Nombre: {nombre}, Edad: {edad}")</code>',
-      'Las tres producen exactamente el mismo resultado'
-    ],
-    ans: 2,
-    fb: 'La opción con <code>f"..."</code> y variables entre llaves es la f-string. Nota: la opción de comas añade espacios extras, así que en realidad no produce exactamente la misma salida.'
-  },
-  {
-    badge: 'badge-mixed', tipo: 'comparativa',
     q: '¿Cuál de estas formas de print NO requiere convertir un número entero a cadena?',
     opts: [
       '<code>print("Valor: " + numero)</code>',
@@ -836,7 +824,6 @@ S_shuffled.forEach((q, qi) => {
     </div>
     <div class="short-body">
       <textarea id="short-ta-${qi}" placeholder="Escribe tu respuesta…"></textarea><br>
-      <button class="reveal-btn" data-qi="${qi}">Ver respuesta modelo ↓</button>
       <div class="model-answer" id="ma-${qi}">${q.model}</div>
     </div>
   `;
