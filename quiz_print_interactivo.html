@@ -364,9 +364,135 @@
     color: #a0c878;
     min-height: 1.2em;
   }
+
+  /* ── ACCESS GATE ── */
+  #access-gate {
+    position: fixed;
+    inset: 0;
+    background: var(--ink);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+  #access-gate.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s ease;
+  }
+  .gate-box {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 2.5rem 2.5rem 2rem;
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+  }
+  .gate-box .gate-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .gate-box h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.7rem;
+    color: #f0f0f0;
+    margin-bottom: .25rem;
+  }
+  .gate-box h2 em { font-style: italic; color: #f0e68c; }
+  .gate-box .gate-sub {
+    font-size: .85rem;
+    color: #666;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+  }
+  .gate-input-wrap {
+    position: relative;
+    margin-bottom: 1rem;
+  }
+  #access-code {
+    width: 100%;
+    background: #111;
+    border: 2px solid #333;
+    color: #f0f0f0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.4rem;
+    letter-spacing: .25em;
+    text-align: center;
+    padding: .85rem 1rem;
+    border-radius: 7px;
+    transition: border-color .2s;
+    outline: none;
+  }
+  #access-code:focus { border-color: #f0e68c; }
+  #access-code.shake {
+    animation: shake .35s ease;
+    border-color: #e74c3c !important;
+  }
+  @keyframes shake {
+    0%,100%{ transform:translateX(0); }
+    20%{ transform:translateX(-8px); }
+    40%{ transform:translateX(8px); }
+    60%{ transform:translateX(-5px); }
+    80%{ transform:translateX(5px); }
+  }
+  #btn-validate {
+    width: 100%;
+    background: #f0e68c;
+    color: #1a1714;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .9rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    padding: .85rem;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: background .15s, transform .1s;
+  }
+  #btn-validate:hover { background: #fff; }
+  #btn-validate:active { transform: scale(.97); }
+  #gate-error {
+    margin-top: .75rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .78rem;
+    color: #e74c3c;
+    min-height: 1.1em;
+    transition: opacity .2s;
+  }
+  .gate-hint {
+    margin-top: 1.5rem;
+    font-size: .75rem;
+    color: #444;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Hide quiz content until unlocked */
+  #quiz-content { display: none; }
 </style>
 </head>
 <body>
+
+<!-- ── ACCESS GATE ── -->
+<div id="access-gate">
+  <div class="gate-box">
+    <div class="gate-icon">🔒</div>
+    <h2>Quiz <em>Python</em></h2>
+    <p class="gate-sub">Introduce el código que te ha dado<br>tu profesor para acceder al test.</p>
+    <div class="gate-input-wrap">
+      <input type="password" id="access-code" maxlength="20"
+             placeholder="· · · · · ·"
+             autocomplete="off" spellcheck="false">
+    </div>
+    <button id="btn-validate" onclick="validateCode()">Validar código →</button>
+    <div id="gate-error"></div>
+    <p class="gate-hint">Pulsa Enter o el botón para continuar</p>
+  </div>
+</div>
+
+<!-- ── QUIZ CONTENT (hidden until unlocked) ── -->
+<div id="quiz-content">
 
 <header>
   <div>
@@ -393,11 +519,8 @@
 
 <div id="export-panel">
   <h2>Enviar resultados al <em>profesor</em></h2>
-  <p>Cuando hayas terminado el quiz, usa los botones de abajo.<br>
-  <strong>Opción 1:</strong> abre tu correo con las respuestas listas para enviar.<br>
-  <strong>Opción 2:</strong> descarga un informe HTML y adjúntalo al correo manualmente.</p>
+  <p>Cuando hayas terminado el quiz, descarga el informe y envíaselo a tu profesor.</p>
   <div class="export-actions">
-    <button class="btn-export btn-email" onclick="exportEmail()">✉ Abrir correo</button>
     <button class="btn-export btn-download" onclick="exportHTML()">⬇ Descargar informe</button>
   </div>
   <div id="export-status"></div>
@@ -406,7 +529,59 @@
 
 <div id="scorebox">Aciertos: <span class="big" id="sc">0</span> / <span id="tot">12</span></div>
 
+</div><!-- end #quiz-content -->
+
 <script>
+// ── ACCESS GATE ─────────────────────────────────────────────────
+// Cambia este código por el que quieras dar a tus alumnos
+const ACCESS_CODE = 'miguelfernandez';
+
+function validateCode() {
+  const input = document.getElementById('access-code');
+  const errEl = document.getElementById('gate-error');
+  const val   = input.value.trim().toLowerCase();
+
+  if (val === ACCESS_CODE.toLowerCase()) {
+    // Unlock: fade out gate, show quiz
+    const gate = document.getElementById('access-gate');
+    gate.classList.add('hidden');
+    setTimeout(() => { gate.style.display = 'none'; }, 420);
+    const content = document.getElementById('quiz-content');
+    content.style.display = 'block';
+    // Focus student name field
+    setTimeout(() => {
+      const nameField = document.getElementById('student-name');
+      if (nameField) nameField.focus();
+    }, 450);
+  } else {
+    // Wrong code: shake + error message
+    input.classList.add('shake');
+    input.value = '';
+    errEl.textContent = 'Código incorrecto. Inténtalo de nuevo.';
+    setTimeout(() => {
+      input.classList.remove('shake');
+      input.focus();
+    }, 380);
+  }
+}
+
+// Allow Enter key to validate
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const gate = document.getElementById('access-gate');
+    if (gate && gate.style.display !== 'none' && !gate.classList.contains('hidden')) {
+      validateCode();
+    }
+  }
+});
+
+// Clear error message while typing
+document.addEventListener('input', e => {
+  if (e.target.id === 'access-code') {
+    document.getElementById('gate-error').textContent = '';
+  }
+});
+// ────────────────────────────────────────────────────────────────
 const T = [
   // ── print normal / concatenación ──────────────────────────────
   {
