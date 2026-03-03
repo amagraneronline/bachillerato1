@@ -699,7 +699,7 @@ const T = [
 const S = [
   {
     badge: 'badge-print', tipo: 'print + concat',
-    q: 'Tienes las variables <code>producto = "silla"</code> y <code>precio = 59</code>. <br><br> Escribe la línea <code>print</code> que muestre <code>El producto silla cuesta 59 euros</code> usando el operador <code>+</code>.',
+    q: 'Tienes las variables <code>producto = "silla"</code> y <code>precio = 59</code>. <br><br> Escribe la línea <code>print</code> que muestre <code>El producto silla cuesta 59 euros</code> <strong>usando el operador </strong> <code>+</code>.',
     model: `<strong>Respuesta:</strong><br><code>print("El producto " + producto + " cuesta " + str(precio) + " euros")</code><br><br>Es necesario usar <code>str(precio)</code> porque <code>precio</code> es un <code>int</code> y el operador <code>+</code> no mezcla tipos distintos.`
   },
   {
@@ -709,7 +709,7 @@ const S = [
   },
   {
     badge: 'badge-fstr', tipo: 'f-string',
-    q: 'Tienes las variables <code>producto = "silla"</code> y <code>precio = 59</code>. <br> Escribe la misma frase <code>El producto silla cuesta 59 euros</code> vez usando f-string. <br> Además, modifícala para que muestre el precio con el símbolo <code>€</code> justo detrás del número, sin espacio: <code>El producto silla cuesta 59€</code>.',
+    q: 'Tienes las variables <code>producto = "silla"</code> y <code>precio = 59</code>. <br> Escribe la misma frase <code>El producto silla cuesta 59 euros</code> <strong> vez usando f-string</strong>. <br> Además, modifícala para que muestre el precio con el símbolo <code>€</code> justo detrás del número, sin espacio: <code>El producto silla cuesta 59€</code>.',
     model: `<strong>Respuesta:</strong><br><code>print(f"El producto {producto} cuesta {precio}€")</code><br><br>Con f-string es muy fácil añadir texto justo después de una variable dentro de las llaves o fuera de ellas: <code>{precio}€</code> pega el símbolo sin espacio.`
   },
   {
