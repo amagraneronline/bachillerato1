@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Rúbrica de Evaluación</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #4f46e5; --bg: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg); padding: 40px 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { background: var(--primary); color: white; padding: 12px; text-align: left; }
+        td { padding: 10px; border-bottom: 1px solid #e2e8f0; }
+        .btn { background: var(--primary); color: white; border: none; padding: 12px 20px; border-radius: 6px; cursor: pointer; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container" id="area-a-exportar">
+    <h2 id="titulo-reporte">Informe de Evaluación</h2>
+    <p><b>Evaluador:</b> <input type="text" id="input-evaluador" placeholder="Nombre del evaluador"></p>
+    <p><b>Estudiante:</b> <input type="text" id="input-estudiante" placeholder="Nombre del estudiante"></p>
+    
+    <table id="tabla-criterios">
+        <thead><tr><th>Criterio</th><th>Nota (1-4)</th></tr></thead>
+        <tbody id="tbody-criterios"></tbody>
+    </table>
+    <p id="texto-promedio"></p>
+</div>
+
+<div style="text-align: center;">
+    <button class="btn" onclick="descargarPDF()">Descargar PDF</button>
+</div>
+
+<script>
+    const criterios = ["Crear lista vacía", "Añadir elemento", "Modificar elemento", "Eliminar elemento", "Buscar elemento", "Mostrar elementos", "Contar elementos", "Ordenar lista", "Mostrar primero/último", "Vaciar lista"];
+    const tbody = document.getElementById('tbody-criterios');
+
+    criterios.forEach(c => {
+        tbody.innerHTML += `<tr><td>${c}</td><td><select class="score">
+            <option value="4">4</option><option value="3">3</option><option value="2">2</option><option value="1">1</option>
+        </select></td></tr>`;
+    });
+
+    async function descargarPDF() {
+        const { jsPDF } = window.jspdf;
+        const evaluador = document.getElementById('input-evaluador').value || "Evaluador";
+        const estudiante = document.getElementById('input-estudiante').value || "Estudiante";
+        
+        // Calcular promedio antes de capturar
+        const scores = Array.from(document.querySelectorAll('.score')).map(s => parseInt(s.value));
+        const avg = (scores.reduce((a, b) => a + b) / scores.length).toFixed(2);
+        document.getElementById('texto-promedio').innerHTML = `<b>Nota Final: ${avg}</b>`;
+
+        const element = document.getElementById('area-a-exportar');
+        
+        const canvas = await html2canvas(element, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`Evaluacion_${estudiante}_por_${evaluador}.pdf`);
+    }
+</script>
+</body>
+</html>
