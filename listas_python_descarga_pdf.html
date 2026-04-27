@@ -10,6 +10,22 @@
       padding: 0;
       background: #f5f5f5;
     }
+    body.locked header,
+    body.locked main {
+      display: none;
+    }
+    .access-denied {
+      max-width: 520px;
+      margin: 4rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+    .access-denied h1 {
+      color: #b91c1c;
+    }
     header {
       background: #1f2933;
       color: #fff;
@@ -112,7 +128,7 @@
     }
   </style>
 </head>
-<body>
+<body class="locked">
   <header>
     <h1>Ficha evaluativa – Operaciones básicas con listas en Python</h1>
   </header>
@@ -318,6 +334,28 @@
   </main>
 
   <script>
+
+    const ACCESS_PASSWORD = "inteligenciaartificial";
+
+    function requestAccessPassword() {
+      const password = window.prompt("Introduce la contraseña para acceder a las preguntas:");
+
+      if (password === ACCESS_PASSWORD) {
+        document.body.classList.remove("locked");
+        return;
+      }
+
+      document.body.classList.remove("locked");
+      document.body.innerHTML = `
+        <section class="access-denied">
+          <h1>Acceso bloqueado</h1>
+          <p>La contraseña introducida no es correcta.</p>
+          <button type="button" onclick="location.reload()">Intentar de nuevo</button>
+        </section>`;
+    }
+
+    document.addEventListener("DOMContentLoaded", requestAccessPassword);
+
     function collectAnswers() {
       const data = {};
       data.nombre = document.getElementById("nombre").value.trim();
