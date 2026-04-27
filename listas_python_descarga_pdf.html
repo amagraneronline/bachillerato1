@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ficha evaluativa – Listas en Python</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+    }
+    header {
+      background: #1f2933;
+      color: #fff;
+      padding: 1rem 2rem;
+    }
+    main {
+      max-width: 900px;
+      margin: 1.5rem auto 3rem;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+    .student-data {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      border-radius: 6px;
+      background: #f0f4f8;
+    }
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    input[type="text"], select, textarea {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      border-radius: 4px;
+      border: 1px solid #cbd2d9;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    textarea {
+      min-height: 60px;
+      resize: vertical;
+    }
+    fieldset {
+      border: 1px solid #d8e2ec;
+      border-radius: 6px;
+      margin-bottom: 1.25rem;
+      padding: 1rem 1.25rem;
+    }
+    legend {
+      font-weight: 700;
+      padding: 0 0.25rem;
+    }
+    .question-text {
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    .code {
+      font-family: "Fira Code", Consolas, monospace;
+      background: #f5f7fa;
+      border-radius: 4px;
+      padding: 0.4rem 0.5rem;
+      display: inline-block;
+      margin: 0.25rem 0 0.5rem;
+      white-space: pre;
+    }
+    .options {
+      margin-left: 0.5rem;
+    }
+    .options label {
+      font-weight: 400;
+    }
+    .export-area {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #d8e2ec;
+    }
+    button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      padding: 0.6rem 1.2rem;
+      font-size: 0.95rem;
+      cursor: pointer;
+      margin-right: 0.75rem;
+    }
+    button:hover {
+      background: #1d4ed8;
+    }
+    .small {
+      font-size: 0.8rem;
+      color: #6b7280;
+      margin-top: 0.25rem;
+    }
+    #exportedData {
+      width: 100%;
+      min-height: 120px;
+      margin-top: 0.5rem;
+      font-family: "Fira Code", Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ficha evaluativa – Operaciones básicas con listas en Python</h1>
+  </header>
+
+  <main>
+    <section class="student-data">
+      <div>
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" name="nombre" required />
+      </div>
+      <div>
+        <label for="apellido">Apellido</label>
+        <input type="text" id="apellido" name="apellido" required />
+      </div>
+      <div>
+        <label for="grupo">Grupo</label>
+        <input type="text" id="grupo" name="grupo" placeholder="Ej: 1ºDAM-A" required />
+      </div>
+    </section>
+
+    <!-- PREGUNTAS TIPO TEST -->
+    <h2>Preguntas tipo test</h2>
+
+    <fieldset data-question-id="q1">
+      <legend>Pregunta 1</legend>
+      <p class="question-text">
+        ¿Cuál es la forma correcta de crear una lista con los números 1, 2 y 3 en Python?
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q1" value="a" /> a) <span class="code">(1, 2, 3)</span></label><br />
+        <label><input type="radio" name="q1" value="b" /> b) <span class="code">{1, 2, 3}</span></label><br />
+        <label><input type="radio" name="q1" value="c" /> c) <span class="code">[1, 2, 3]</span></label><br />
+        <label><input type="radio" name="q1" value="d" /> d) <span class="code">list = 1, 2, 3</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset data-question-id="q2">
+      <legend>Pregunta 2</legend>
+      <p class="question-text">
+        ¿Qué método se utiliza para añadir un elemento al final de una lista llamada <span class="code">numeros</span>?
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q2" value="a" /> a) <span class="code">numeros.add(4)</span></label><br />
+        <label><input type="radio" name="q2" value="b" /> b) <span class="code">numeros.append(4)</span></label><br />
+        <label><input type="radio" name="q2" value="c" /> c) <span class="code">numeros.push(4)</span></label><br />
+        <label><input type="radio" name="q2" value="d" /> d) <span class="code">add(numeros, 4)</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset data-question-id="q3">
+      <legend>Pregunta 3</legend>
+      <p class="question-text">
+        Dada la lista <span class="code">nombres = ["Ana", "Luis", "Marta"]</span>, ¿qué instrucción modifica el elemento "Luis" por "Lucía"?
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q3" value="a" /> a) <span class="code">nombres[1] = "Lucía"</span></label><br />
+        <label><input type="radio" name="q3" value="b" /> b) <span class="code">nombres[2] = "Lucía"</span></label><br />
+        <label><input type="radio" name="q3" value="c" /> c) <span class="code">nombres["Luis"] = "Lucía"</span></label><br />
+        <label><input type="radio" name="q3" value="d" /> d) <span class="code">nombres.replace("Luis", "Lucía")</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset data-question-id="q4">
+      <legend>Pregunta 4</legend>
+      <p class="question-text">
+        ¿Qué ocurre al ejecutar el siguiente código?
+      </p>
+      <p class="code">
+        numeros = [1, 2, 3]<br />
+        numeros.remove(4)
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q4" value="a" /> a) Elimina el número 4 si está en la lista, y si no, no hace nada.</label><br />
+        <label><input type="radio" name="q4" value="b" /> b) Añade el número 4 a la lista.</label><br />
+        <label><input type="radio" name="q4" value="c" /> c) Produce un error porque 4 no está en la lista.</label><br />
+        <label><input type="radio" name="q4" value="d" /> d) Ordena la lista.</label>
+      </div>
+    </fieldset>
+
+    <fieldset data-question-id="q5">
+      <legend>Pregunta 5</legend>
+      <p class="question-text">
+        ¿Qué función integrada devuelve el número de elementos de una lista llamada <span class="code">datos</span>?
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q5" value="a" /> a) <span class="code">size(datos)</span></label><br />
+        <label><input type="radio" name="q5" value="b" /> b) <span class="code">count(datos)</span></label><br />
+        <label><input type="radio" name="q5" value="c" /> c) <span class="code">len(datos)</span></label><br />
+        <label><input type="radio" name="q5" value="d" /> d) <span class="code">length(datos)</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset data-question-id="q6">
+		<legend>Pregunta 6</legend>
+		<p class="question-text">
+			Escribe el código en Python que muestre el primer y el último elemento de una lista llamada 
+			<span class="code">valores</span>.
+		</p>
+		<textarea name="q6" placeholder="Escribe aquí tu respuesta en código Python..."></textarea>
+	</fieldset>
+
+    <fieldset data-question-id="q7">
+      <legend>Pregunta 7</legend>
+      <p class="question-text">
+        ¿Qué método se utiliza para ordenar una lista llamada <span class="code">notas</span> de menor a mayor, modificándola en el sitio?
+      </p>
+      <div class="options">
+        <label><input type="radio" name="q7" value="a" /> a) <span class="code">sort(notas)</span></label><br />
+        <label><input type="radio" name="q7" value="b" /> b) <span class="code">notas.sort()</span></label><br />
+        <label><input type="radio" name="q7" value="c" /> c) <span class="code">sorted(notas, in_place=True)</span></label><br />
+        <label><input type="radio" name="q7" value="d" /> d) <span class="code">notas.ordenar()</span></label>
+      </div>
+    </fieldset>
+
+    <!-- PREGUNTAS DE RESPUESTA CORTA / CÓDIGO -->
+    <h2>Preguntas de respuesta corta / código</h2>
+
+    <fieldset data-question-id="q8">
+      <legend>Pregunta 8</legend>
+      <p class="question-text">
+        Escribe el código en Python para crear una lista llamada <span class="code">frutas</span> que contenga las cadenas "manzana", "pera" y "naranja".
+      </p>
+      <textarea name="q8" placeholder="Escribe aquí tu respuesta en código Python..."></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q9">
+      <legend>Pregunta 9</legend>
+      <p class="question-text">
+        Dada la lista <span class="code">edades = [15, 18, 20]</span>, escribe el código para:
+      </p>
+      <ul>
+        <li>Añadir la edad 22 al final de la lista.</li>
+        <li>Modificar el primer elemento para que valga 16.</li>
+      </ul>
+      <textarea name="q9" placeholder="Escribe aquí las instrucciones en Python, una por línea..."></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q10">
+      <legend>Pregunta 10</legend>
+      <p class="question-text">
+        Dada la lista <span class="code">numeros = [3, 1, 4, 1, 5]</span>, escribe el código para:
+      </p>
+      <ul>
+        <li>Mostrar todos los elementos de la lista por pantalla.</li>
+        <li>Mostrar cuántos elementos tiene la lista.</li>
+      </ul>
+      <textarea name="q10" placeholder="Escribe aquí las instrucciones en Python..."></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q11">
+      <legend>Pregunta 11</legend>
+      <p class="question-text">
+        Escribe un fragmento de código en Python que compruebe si el elemento 7 está en la lista
+        <span class="code">numeros = [2, 4, 6, 8]</span> y muestre un mensaje distinto según esté o no esté.
+      </p>
+      <textarea name="q11" placeholder="Escribe aquí las instrucciones en Python..."></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q12">
+      <legend>Pregunta 12</legend>
+      <p class="question-text">
+        Indica si el siguiente código es correcto o incorrecto. Si es incorrecto, explica brevemente por qué.
+      </p>
+      <p class="code">
+        letras = ["a", "b", "c"]<br />
+        letras.remove("d")
+      </p>
+      <textarea name="q12" placeholder="¿Es correcto? ¿Qué ocurre al ejecutarlo?"></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q13">
+      <legend>Pregunta 13</legend>
+      <p class="question-text">
+        Escribe el código para mostrar el primer y el último elemento de la lista
+        <span class="code">nombres = ["Ana", "Luis", "Marta", "Pedro"]</span>.
+      </p>
+      <textarea name="q13" placeholder="Escribe aquí las instrucciones en Python..."></textarea>
+    </fieldset>
+
+    <fieldset data-question-id="q14">
+      <legend>Pregunta 14</legend>
+      <p class="question-text">
+        Dada la lista <span class="code">valores = [10, 3, 7, 1]</span>, escribe el código para:
+      </p>
+      <ul>
+        <li>Ordenar la lista de menor a mayor.</li>
+        <li>Mostrar la lista ya ordenada.</li>
+      </ul>
+      <textarea name="q14" placeholder="Escribe aquí las instrucciones en Python..."></textarea>
+    </fieldset>
+
+    <!-- EXPORTACIÓN -->
+    <section class="export-area">
+      <h2>Exportar respuestas</h2>
+      <p>
+        Cuando termines, descarga el archivo y súbelo a la plataforma Moodle.
+      </p>
+
+      <button type="button" onclick="downloadAnswers()">Descargar PDF</button>
+
+
+    </section>
+  </main>
+
+  <script>
+    function collectAnswers() {
+      const data = {};
+      data.nombre = document.getElementById("nombre").value.trim();
+      data.apellido = document.getElementById("apellido").value.trim();
+      data.grupo = document.getElementById("grupo").value.trim();
+      data.respuestas = {};
+
+      // Preguntas tipo test (radio)
+      const fieldsets = document.querySelectorAll("fieldset[data-question-id]");
+      fieldsets.forEach(fs => {
+        const qid = fs.getAttribute("data-question-id");
+        const radios = fs.querySelectorAll('input[type="radio"]');
+        if (radios.length > 0) {
+          let value = null;
+          radios.forEach(r => {
+            if (r.checked) value = r.value;
+          });
+          data.respuestas[qid] = value;
+        } else {
+          // Preguntas de texto / código
+          const textarea = fs.querySelector("textarea");
+          if (textarea) {
+            data.respuestas[qid] = textarea.value;
+          }
+        }
+      });
+
+      return data;
+    }
+
+    function exportAnswers() {
+      const data = collectAnswers();
+      const json = JSON.stringify(data, null, 2);
+      document.getElementById("exportedData").value = json;
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function getQuestionStatement(fieldset) {
+      const clone = fieldset.cloneNode(true);
+      clone.querySelectorAll("input, textarea").forEach(el => el.remove());
+      const legend = clone.querySelector("legend");
+      if (legend) legend.remove();
+      return clone.innerText.replace(/\n\s*\n/g, "\n").trim();
+    }
+
+    function getSelectedAnswerText(fieldset) {
+      const checked = fieldset.querySelector('input[type="radio"]:checked');
+      if (!checked) return "Sin responder";
+      const label = checked.closest("label");
+      return label ? label.innerText.trim() : checked.value;
+    }
+
+    function buildPdfHtml(data) {
+      const fieldsets = document.querySelectorAll("fieldset[data-question-id]");
+      let questionsHtml = "";
+
+      fieldsets.forEach((fs, index) => {
+        const qid = fs.getAttribute("data-question-id");
+        const statement = getQuestionStatement(fs);
+        const hasRadio = fs.querySelectorAll('input[type="radio"]').length > 0;
+        const answer = hasRadio ? getSelectedAnswerText(fs) : (data.respuestas[qid] || "Sin responder");
+
+        questionsHtml += `
+          <section class="pdf-question">
+            <h2>Pregunta ${index + 1}</h2>
+            <div class="statement">${escapeHtml(statement)}</div>
+            <div><strong>Respuesta:</strong></div>
+            <div class="answer">${escapeHtml(answer)}</div>
+          </section>`;
+      });
+
+      return `
+        <!DOCTYPE html>
+        <html lang="es">
+        <head>
+          <meta charset="UTF-8" />
+          <title>Respuestas listas Python</title>
+          <style>
+            @page { size: A4; margin: 14mm; }
+            body { margin: 0; font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #111827; }
+            .pdf-document { line-height: 1.35; }
+            h1 { font-size: 22px; margin: 0 0 8px; border-bottom: 2px solid #1f2933; padding-bottom: 8px; }
+            .meta { margin: 12px 0 18px; padding: 10px 12px; background: #f3f4f6; border-radius: 6px; font-size: 13px; }
+            .pdf-question { border: 1px solid #d1d5db; border-radius: 6px; padding: 10px 12px; margin-bottom: 10px; break-inside: avoid; page-break-inside: avoid; }
+            .pdf-question h2 { font-size: 15px; margin: 0 0 6px; }
+            .statement { margin-bottom: 6px; font-weight: 600; white-space: pre-wrap; }
+            .answer { white-space: pre-wrap; background: #f9fafb; border-left: 3px solid #2563eb; padding: 6px 8px; font-family: Consolas, "Fira Code", monospace; font-size: 12px; }
+          </style>
+        </head>
+        <body>
+          <main class="pdf-document">
+            <h1>Ficha evaluativa - Operaciones básicas con listas en Python</h1>
+            <section class="meta">
+              <div><strong>Nombre:</strong> ${escapeHtml(data.nombre || "Sin nombre")}</div>
+              <div><strong>Apellido:</strong> ${escapeHtml(data.apellido || "Sin apellido")}</div>
+              <div><strong>Grupo:</strong> ${escapeHtml(data.grupo || "Sin grupo")}</div>
+              <div><strong>Fecha de generación:</strong> ${escapeHtml(new Date().toLocaleString("es-ES"))}</div>
+            </section>
+            ${questionsHtml}
+          </main>
+          <script>
+            window.onload = () => {
+              window.focus();
+              window.print();
+            };
+          <\/script>
+        </body>
+        </html>`;
+    }
+
+    function downloadAnswers() {
+      const data = collectAnswers();
+      const pdfWindow = window.open("", "_blank");
+
+      if (!pdfWindow) {
+        alert("El navegador ha bloqueado la ventana emergente. Permite ventanas emergentes para generar el PDF.");
+        return;
+      }
+
+      pdfWindow.document.open();
+      pdfWindow.document.write(buildPdfHtml(data));
+      pdfWindow.document.close();
+    }
+
+  </script>
+</body>
+</html>
