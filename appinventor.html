@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cómo piensan las máquinas</title>
+    <title>Contenidos de App Inventor</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -26,7 +26,6 @@
 
     header p {
         margin-top: 10px;
-        font-size: 1.1rem;
         color: #cbd5e1;
     }
 
@@ -36,19 +35,16 @@
         padding: 0 20px;
     }
 
-    .intro {
-        text-align: center;
-        margin-bottom: 40px;
-    }
-
-    .intro h2 {
+    .volver {
+        display: inline-block;
+        margin-bottom: 30px;
+        text-decoration: none;
         color: #1e293b;
-        font-size: 2rem;
+        font-weight: bold;
     }
 
-    .intro p {
-        color: #475569;
-        font-size: 1rem;
+    .volver:hover {
+        text-decoration: underline;
     }
 
     .cards {
@@ -61,16 +57,12 @@
     .card {
         background-color: white;
         border-radius: 12px;
-        padding: 30px;
-        width: 320px;
-        min-height: 180px;
+        padding: 25px;
+        width: 280px;
         text-decoration: none;
         color: #1e293b;
         box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
     }
 
     .card:hover {
@@ -80,13 +72,12 @@
 
     .card h2 {
         margin-top: 0;
-        font-size: 1.5rem;
+        font-size: 1.3rem;
     }
 
     .card p {
         font-size: 0.95rem;
         color: #475569;
-        line-height: 1.5;
     }
 
     footer {
@@ -103,34 +94,21 @@
 <body>
 
 <header>
-    <h1>Bachillerato 1</h1>
-    <p>Proyecto educativo de pensamiento computacional, programación y creación de aplicaciones</p>
+    <h1>Contenidos de App Inventor</h1>
+    <p>Proyectos, prácticas y actividades de creación de aplicaciones móviles</p>
 </header>
 
 <div class="container">
 
-    <section class="intro">
-        <h2>Elige el bloque de contenidos</h2>
-        <p>Accede a los materiales de Python o a los nuevos contenidos que iremos creando con App Inventor.</p>
-    </section>
+    <a href="index.html" class="volver">← Volver a la página principal</a>
 
     <div class="cards">
 
-        <a href="python.html" class="card">
-            <h2>Python</h2>
-            <p>
-                Accede a las clases, actividades, cuestionarios y materiales relacionados 
-                con la programación en Python.
-            </p>
+        <a href="guia_appinventor.html" class="card">
+            <h2>Clase 1 App Inventor</h2>
+            <p>Primeros pasos creando aplicaciones móviles.</p>
         </a>
-
-        <a href="appinventor.html" class="card">
-            <h2>App Inventor</h2>
-            <p>
-                Accede a los nuevos materiales, prácticas y proyectos que iremos subiendo 
-                sobre creación de aplicaciones móviles con App Inventor.
-            </p>
-        </a>
+        
 
     </div>
 </div>
